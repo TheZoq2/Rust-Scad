@@ -92,8 +92,6 @@ impl ScadElement
 
 
 
-
-
 #[cfg(test)]
 mod scad_tests
 {
