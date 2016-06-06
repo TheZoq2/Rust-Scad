@@ -10,7 +10,7 @@ pub struct ScadObject
     children: Vec<ScadObject>,
 
     //Decides wether or not the object should be drawn alone (by adding ! before)
-    is_important: bool,
+    important: bool,
 }
 
 impl ScadObject 
@@ -22,7 +22,7 @@ impl ScadObject
 
             children: Vec::new(),
 
-            is_important: false,
+            important: false,
         }
     }
 
@@ -39,7 +39,7 @@ impl ScadObject
         //Get the code for the current element
         result = self.element.clone().get_code();
 
-        if self.is_important
+        if self.important
         {
             result = String::from("!") + &result;
         }
@@ -65,9 +65,9 @@ impl ScadObject
         return result;
     }
 
-    pub fn set_is_important(&mut self, is_important: bool)
+    pub fn is_important(&mut self)
     {
-        self.is_important = is_important;
+        self.important = true;
     }
 }
 
@@ -93,7 +93,7 @@ mod statement_tests
         test_stmt.add_child(ScadObject::new(ScadElement::Cube(na::Vector3::new(1.0, 1.0, 1.0))));
         assert_eq!(test_stmt.get_code(), "translate([0,0,0])\n{\n\tcube([1,1,1]);\n}");
 
-        test_stmt.set_is_important(true);
+        test_stmt.is_important();
         assert_eq!(test_stmt.get_code(), "!translate([0,0,0])\n{\n\tcube([1,1,1]);\n}");
     }
 }
