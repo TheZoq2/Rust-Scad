@@ -6,7 +6,7 @@ more about rust and partly because openscad handles variables in a weird way. Va
 assigned the last value they had in that scope at all points in that scope. This means that the following
 code
 
-```
+```OpenScad
 current_value = 0;
 for( i = [0: 3])
 {
@@ -41,7 +41,7 @@ scad code which accomplishes the same thing as more complex scad code would.
 
 First, let's look at a simple example of the crate being used.
 
-```
+```Rust
 //"Import" the module along with the macros
 #[macro_use]
 extern crate scad_generator;
@@ -65,7 +65,7 @@ pub fn main()
 ```
 
 Which will print the following openscad code
-```
+```OpenSCAD
 translate([2,2,3])
 {
 	cube([2,1,4]);
