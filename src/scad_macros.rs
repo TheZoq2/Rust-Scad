@@ -8,11 +8,11 @@ extern crate nalgebra as na;
 ///scad!(parent;{child1 ... });
 #[macro_export]
 macro_rules! scad {
-    ($parent:expr) => {ScadStatement::new($parent)};
+    ($parent:expr) => {ScadObject::new($parent)};
 
     ($parent:expr;{$($child:expr),*}) => {
         {
-            let mut tmp_stmt = ScadStatement::new($parent);
+            let mut tmp_stmt = ScadObject::new($parent);
 
             $(
                 tmp_stmt.add_child($child);
@@ -36,7 +36,7 @@ mod macro_test
     extern crate nalgebra as na;
     
     use scad_element::*;
-    use scad_statement::*;
+    use scad_object::*;
     use scad_element::ScadElement::*;
     use scad_element::CircleType::*;
 

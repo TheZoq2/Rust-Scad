@@ -3,25 +3,25 @@ use scad_element::*;
 use std::vec::*;
 
 #[derive(Clone)]
-pub struct ScadStatement 
+pub struct ScadObject 
 {
     element: ScadElement,
 
-    children: Vec<ScadStatement>
+    children: Vec<ScadObject>
 }
 
-impl ScadStatement 
+impl ScadObject 
 {
-    pub fn new(element: ScadElement) -> ScadStatement 
+    pub fn new(element: ScadElement) -> ScadObject 
     {
-        ScadStatement {
+        ScadObject {
             element: element,
 
             children: Vec::new(),
         }
     }
 
-    pub fn add_child(&mut self, statement: ScadStatement) 
+    pub fn add_child(&mut self, statement: ScadObject) 
     {
         self.children.push(statement);
     }
@@ -65,17 +65,17 @@ impl ScadStatement
 mod statement_tests
 {
     extern crate nalgebra as na;
-    use scad_statement::*;
+    use scad_object::*;
     use scad_element::*;
 
     #[test]
     fn simple_stmt_test()
     {
-        let mut test_stmt = ScadStatement::new(ScadElement::Translate(na::Vector3::new(0.0, 0.0, 0.0)));
+        let mut test_stmt = ScadObject::new(ScadElement::Translate(na::Vector3::new(0.0, 0.0, 0.0)));
 
         assert_eq!(test_stmt.get_code(), "translate([0,0,0]);");
 
-        test_stmt.add_child(ScadStatement::new(ScadElement::Cube(na::Vector3::new(1.0, 1.0, 1.0))));
+        test_stmt.add_child(ScadObject::new(ScadElement::Cube(na::Vector3::new(1.0, 1.0, 1.0))));
         assert_eq!(test_stmt.get_code(), "translate([0,0,0])\n{\n\tcube([1,1,1]);\n}");
     }
 }
