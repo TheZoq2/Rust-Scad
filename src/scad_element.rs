@@ -38,22 +38,23 @@ pub enum ScadElement {
     Translate(na::Vector3<f32>),
     Scale(na::Vector3<f32>),
     Rotate(f32, na::Vector3<f32>),
+    Mirror(na::Vector3<f32>),
 
     Difference,
     Union,
+    Hull,
+    Intersection,
 
     //Object stuff
     Cube(na::Vector3<f32>),
-    Cylinder(f32, CircleType)
+    Cylinder(f32, CircleType),
 }
 
 impl ScadElement
 {
     pub fn get_code(self) -> String 
     {
-        let code: String;
-
-        code = match self
+        match self
         {
             //Transformation things
             ScadElement::Translate(value) => {
@@ -64,6 +65,9 @@ impl ScadElement
             },
             ScadElement::Rotate(angle, vector) => {
                 String::from("rotate(") + &angle.get_code() + "," + &vector.get_code() + ")"
+            },
+            ScadElement::Mirror(vector) => {
+                String::from("mirror(") + &vector.get_code() + ")"
             },
 
             //Primitive objects
@@ -84,9 +88,9 @@ impl ScadElement
             //Combination constructs
             ScadElement::Difference => String::from("difference()"),
             ScadElement::Union => String::from("union()"),
-        };
-
-        return code;
+            ScadElement::Hull => String::from("hull()"),
+            ScadElement::Intersection => String::from("intersection()"),
+        }
     }
 }
 
