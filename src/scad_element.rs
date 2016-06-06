@@ -12,7 +12,7 @@ impl ScadType for na::Vector3<f32>
 {
     fn get_code(&self) -> String 
     {
-        String::from("[") + &self.x.get_code() + "," + &self.y.get_code() + "," + &self.y.get_code() + "]"
+        String::from("[") + &self.x.get_code() + "," + &self.y.get_code() + "," + &self.z.get_code() + "]"
     }
 }
 impl ScadType for f32
@@ -106,6 +106,7 @@ mod scad_tests
         //as expected
         assert_eq!(na::Vector3::new(0.0, 0.0, 0.0).get_code(), "[0,0,0]");
         assert_eq!(na::Vector3::new(-5.0, 0.0, 0.0).get_code(), "[-5,0,0]");
+        assert_eq!(na::Vector3::new(1.0,2.0,3.0).get_code(), "[1,2,3]");
     }
 
     #[test]
