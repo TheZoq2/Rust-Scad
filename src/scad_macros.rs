@@ -21,6 +21,18 @@ macro_rules! scad {
             tmp_stmt
         }
     };
+
+    ($parent:expr;$($child:expr),*) => {
+        {
+            let mut tmp_stmt = ScadObject::new($parent);
+
+            $(
+                tmp_stmt.add_child($child);
+            )*
+
+            tmp_stmt
+        }
+    };
 }
 
 pub fn vec3(x: f32, y: f32, z:f32) -> na::Vector3<f32>
@@ -53,5 +65,7 @@ mod macro_test
     fn scad_macro_test()
     {
         assert_eq!(scad!(Cube(vec3(1.0,3.0,4.0))).get_code(), "cube([1,3,4]);");
+
+        assert_eq!(scad!(Cube(vec3(1.0,3.0,4.0)); scad!(Cylinder(5.0, Radius(3.0)))).get_code(), "cube([1,3,4])\n{\n\tcylinder(h=5,r=3);\n}");
     }
 }
