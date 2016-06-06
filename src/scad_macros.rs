@@ -10,7 +10,7 @@ extern crate nalgebra as na;
 macro_rules! scad {
     ($parent:expr) => {ScadObject::new($parent)};
 
-    ($parent:expr;{$($child:expr),*}) => {
+    ($parent:expr;{$($child:expr),*$(),+}) => {
         {
             let mut tmp_stmt = ScadObject::new($parent);
 
@@ -67,5 +67,21 @@ mod macro_test
         assert_eq!(scad!(Cube(vec3(1.0,3.0,4.0))).get_code(), "cube([1,3,4]);");
 
         assert_eq!(scad!(Cube(vec3(1.0,3.0,4.0)); scad!(Cylinder(5.0, Radius(3.0)))).get_code(), "cube([1,3,4])\n{\n\tcylinder(h=5,r=3);\n}");
+    }
+
+    #[test]
+    fn many_children_test()
+    {
+        assert_eq!(scad!(Translate(vec3(0.0,0.0,0.0));{
+                scad!(Cube(vec3(1.0,1.0,1.0))),
+                scad!(Cube(vec3(1.0,1.0,1.0)))
+            }).get_code(), "translate([0,0,0])\n{\n\tcube([1,1,1]);\n\tcube([1,1,1]);\n}"
+        );
+        //Test trailing edge ,
+        assert_eq!(scad!(Translate(vec3(0.0,0.0,0.0));{
+                scad!(Cube(vec3(1.0,1.0,1.0))),
+                scad!(Cube(vec3(1.0,1.0,1.0))),
+            }).get_code(), "translate([0,0,0])\n{\n\tcube([1,1,1]);\n\tcube([1,1,1]);\n}"
+        );
     }
 }
