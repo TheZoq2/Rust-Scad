@@ -34,3 +34,4 @@ pub fn variable_children()
 
     assert_eq!("translate([2,2,3])\n{\n\tcube([2,1,4]);\n\tcylinder(h=3,r=5);\n}", parent.get_code());
 }
+

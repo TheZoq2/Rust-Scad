@@ -54,4 +54,14 @@ mod macro_test
     {
         assert_eq!(scad!(Cube(vec3(1.0,3.0,4.0))).get_code(), "cube([1,3,4]);");
     }
+
+    #[test]
+    fn many_children_test()
+    {
+        assert_eq!(scad!(Translate(vec3(0.0,0.0,0.0));{
+                scad!(Cube(vec3(1.0,1.0,1.0))),
+                scad!(Cube(vec3(1.0,1.0,1.0)))
+            }).get_code(), "translate([0,0,0])\n{\n\tcube([1,1,1]);\n\tcube([1,1,1]);\n}"
+        );
+    }
 }
