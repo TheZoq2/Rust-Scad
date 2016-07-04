@@ -2,7 +2,6 @@ mod scad_element;
 mod scad_object;
 mod scad_file;
 
-
 #[macro_use]
 pub mod scad_macros;
 
