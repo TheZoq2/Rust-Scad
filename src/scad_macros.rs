@@ -8,11 +8,8 @@ extern crate nalgebra as na;
 ///scad!(parent;{child1 ... });
 #[macro_export]
 macro_rules! scad {
-    ([ $parent:expr ]) => {$parent};
-
     ($parent:expr) => {ScadObject::new($parent)};
 
-    //Parent followed by children in curly brakcets
     ($parent:expr;{$($child:expr),*$(),+}) => {
         {
             let mut tmp_stmt = ScadObject::new($parent);
@@ -25,20 +22,6 @@ macro_rules! scad {
         }
     };
 
-    //Recursive version of the macro
-    ($parent:ident($($parent_params:expr)*){$($inner:tt)*}) => {
-        {
-            let mut tmp_stmt = ScadObject::new($parent($($parent_params),*));
-
-            $(
-                tmp_stmt.add_child(scad!($inner));
-            )*
-
-            tmp_stmt
-        }
-    };
-
-    //Parent followed by children without curly brackets
     ($parent:expr;$($child:expr),*) => {
         {
             let mut tmp_stmt = ScadObject::new($parent);
@@ -84,50 +67,6 @@ mod macro_test
         assert_eq!(scad!(Cube(vec3(1.0,3.0,4.0))).get_code(), "cube([1,3,4]);");
 
         assert_eq!(scad!(Cube(vec3(1.0,3.0,4.0)); scad!(Cylinder(5.0, Radius(3.0)))).get_code(), "cube([1,3,4])\n{\n\tcylinder(h=5,r=3);\n}");
-        
-    }
-
-    #[test]
-    fn recursive_macro_test()
-    {
-        let test_element = scad!(Cube(vec3(5.0, 3.0, 3.0)));
-
-        assert_eq!(scad!(
-            Translate(vec3(1.0, 3.0, 4.0))
-            {
-                (Cylinder(1.0, Diameter(3.0)))
-                {Cylinder(1.0, Diameter(3.0))}
-                [test_element]
-            }).get_code(), "translate([1,3,4])\n{\n\tcylinder(h=1,d=3);\n\tcylinder(h=1,d=3);\n\tcube([5,3,3]);\n}");
-
-        let test_element = scad!(Cube(vec3(5.0, 3.0, 3.0)));
-        assert_eq!(scad!(
-            Translate(vec3(1.0, 3.0, 4.0))
-            {
-                (Cylinder(2.0, Diameter(3.0)))
-                [test_element]
-                (Cylinder(1.0, Diameter(3.0)))
-            }).get_code(), "translate([1,3,4])\n{\n\tcylinder(h=2,d=3);\n\tcube([5,3,3]);\n\tcylinder(h=1,d=3);\n}");
-
-        //Assuming this generates the correct code, just making sure it compiles
-        scad!(
-        Translate(vec3(1.0, 3.0, 4.0))
-        {
-            (Cylinder(2.0, Diameter(3.0)))
-            [scad!(Translate(vec3(1.0, 1.0, 1.0))
-            {
-                (Cube(vec3(1.0, 2.0, 2.0)))
-            })]
-        });
-
-        scad!(Translate(vec3(1.0, 3.0, 4.0))
-        {
-            scad!(Translate(vec3(2.0, 1.0, 3.0))
-            {
-                (Cube(vec3(1.0, 1.0, 1.0)))
-            })
-            (Union)
-        });
     }
 
     #[test]
