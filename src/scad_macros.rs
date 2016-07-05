@@ -40,6 +40,37 @@ pub fn vec3(x: f32, y: f32, z:f32) -> na::Vector3<f32>
     na::Vector3::new(x,y,z)
 }
 
+#[macro_export]
+macro_rules! qstruct
+{
+    ($name:ident
+    ($($param_name:ident: $param_type:ty),*$(),+)
+    {
+        $($mem_name:ident : $mem_type:ty = $mem_value:expr),*$(),+
+    }) 
+    =>
+    {
+        struct $name
+        {
+            $(
+                pub $mem_name : $mem_type
+            ),*
+        }
+
+        impl $name
+        {
+            pub fn new($( $param_name: $param_type ),*) -> $name
+            {
+                $name{
+                    $(
+                        $mem_name: $mem_value,
+                    )*
+                }
+            }
+        }
+    }
+}
+
 #[allow(unused_imports)]
 #[allow(unused_attributes)]
 #[cfg(test)]
@@ -52,8 +83,8 @@ mod macro_test
     use scad_element::ScadElement::*;
     use scad_element::CircleType::*;
 
-    #[macro_use]
     use scad_macros::*;
+
 
     #[test]
     fn vec3_test()
@@ -83,5 +114,42 @@ mod macro_test
                 scad!(Cube(vec3(1.0,1.0,1.0))),
             }).get_code(), "translate([0,0,0])\n{\n\tcube([1,1,1]);\n\tcube([1,1,1]);\n}"
         );
+    }
+
+    #[test]
+    fn qstruct_test() 
+    {
+    }
+}
+
+#[cfg(test)]
+mod qstruct_test
+{
+    extern crate nalgebra as na;
+
+    use scad_macros::*;
+
+    qstruct!{
+        Test1(param1: f32, param2: u16)
+        {
+            var1: f32 = param1 + 5.,
+            var2: u16 = 3 + param2,
+        }
+    }
+
+    //qstruct!{Test2()
+    //{
+    //    var1: f32 = 1.3,
+    //    var2: f32 = var1 * 2.,
+    //}}
+
+
+    #[test]
+    fn new_test()
+    {
+        let instance = Test1::new(1.3, 100);
+
+        assert_eq!(instance.var1, 1.3 + 5.);
+        assert_eq!(instance.var2, 100+3);
     }
 }
