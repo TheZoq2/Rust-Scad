@@ -50,6 +50,7 @@ macro_rules! qstruct
     }) 
     =>
     {
+        //Create the struct itself
         struct $name
         {
             $(
@@ -57,13 +58,19 @@ macro_rules! qstruct
             ),*
         }
 
+        //Implement the new function
         impl $name
         {
             pub fn new($( $param_name: $param_type ),*) -> $name
             {
+                //Create variables for the values first so we can use previous variables when
+                //selecting the value of future variables
+                $(let $mem_name = $mem_value;)*
+
+                //Create the actual struct itself
                 $name{
                     $(
-                        $mem_name: $mem_value,
+                        $mem_name: $mem_name,
                     )*
                 }
             }
@@ -127,8 +134,6 @@ mod qstruct_test
 {
     extern crate nalgebra as na;
 
-    use scad_macros::*;
-
     qstruct!{
         Test1(param1: f32, param2: u16)
         {
@@ -137,11 +142,6 @@ mod qstruct_test
         }
     }
 
-    //qstruct!{Test2()
-    //{
-    //    var1: f32 = 1.3,
-    //    var2: f32 = var1 * 2.,
-    //}}
 
 
     #[test]
@@ -151,5 +151,22 @@ mod qstruct_test
 
         assert_eq!(instance.var1, 1.3 + 5.);
         assert_eq!(instance.var2, 100+3);
+    }
+
+    //Testing the ability to select values of variables in the struct based on other variables
+    //present in it
+    qstruct!{Test2()
+    {
+        var1: f32 = 1.3,
+        var2: f32 = var1 * 2.,
+    }}
+
+    #[test]
+    fn dependent_variables_test()
+    {
+        let instance = Test2::new();
+
+        assert_eq!(instance.var1, 1.3);
+        assert_eq!(instance.var2, 1.3*2.);
     }
 }

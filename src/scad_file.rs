@@ -89,8 +89,6 @@ mod file_tests
 
     use scad_file::{ScadFile};
 
-    #[macro_use]
-    use scad_macros::*;
 
     use std::fs;
     use std::fs::File;
@@ -108,7 +106,7 @@ mod file_tests
         let obj = ScadObject::new(ScadElement::Union);
         sfile.add_object(obj);
 
-        let mut obj = ScadObject::new(ScadElement::Difference);
+        let obj = ScadObject::new(ScadElement::Difference);
         sfile.add_object(obj);
 
         assert_eq!(sfile.get_code(), "$fn=30;\nunion();\ndifference();\n")
