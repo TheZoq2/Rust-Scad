@@ -169,4 +169,26 @@ mod qstruct_test
         assert_eq!(instance.var1, 1.3);
         assert_eq!(instance.var2, 1.3*2.);
     }
+
+    qstruct!{
+        Test3()
+        {
+            var1: f32 = 1.,
+            var2: u32 = 3,
+        }
+    }
+
+    impl Test3
+    {
+        pub fn get_sum(&self) -> f32
+        {
+            self.var1 + self.var2 as f32
+        }
+    }
+
+    #[test]
+    fn impl_test()
+    {
+        assert_eq!(Test3::new().get_sum(), 4.);
+    }
 }
