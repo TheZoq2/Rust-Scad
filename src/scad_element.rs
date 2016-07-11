@@ -58,11 +58,11 @@ pub enum CircleType {
 #[derive(Clone)]
 pub struct LinExtrudeParams 
 {
-    height: f32,
-    center: bool,
-    convexity: i32,
-    twist: f32,
-    slices: i32,
+    pub height: f32,
+    pub center: bool,
+    pub convexity: i32,
+    pub twist: f32,
+    pub slices: i32,
 }
 
 impl Default for LinExtrudeParams
