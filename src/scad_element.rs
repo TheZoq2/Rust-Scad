@@ -2,6 +2,8 @@ use std::string::*;
 use scad_type::*;
 extern crate nalgebra as na;
 
+use std::vec::Vec;
+
 
 //Since scad allows creation of circle like objects using either radius or diameter,
 //this enum specifies which format to use
@@ -67,6 +69,7 @@ pub enum ScadElement {
     //Object stuff
     Cube(na::Vector3<f32>),
     Cylinder(f32, CircleType),
+    Polyhedron(Vec<na::Vector3<f32>>, Vec<i32>),
 
     //2D stuff
     Square(na::Vector2<f32>),
@@ -107,6 +110,9 @@ impl ScadElement
                 };
 
                 String::from("cylinder(h=") + &height.get_code() + "," + &width_str + ")"
+            },
+            ScadElement::Polyhedron(points,faces) => {
+                String::from("polyhedron(points=") + &points.get_code() +",faces=" + &faces.get_code() + ")"
             },
 
             //primitive 2d objects
