@@ -1,49 +1,7 @@
 use std::string::*;
-
+use scad_type::*;
 extern crate nalgebra as na;
 
-//Trait for converting from rust types to strings compatible with openscad
-pub trait ScadType 
-{
-    fn get_code(&self) -> String;
-}
-
-impl ScadType for na::Vector3<f32>
-{
-    fn get_code(&self) -> String 
-    {
-        String::from("[") + &self.x.get_code() + "," + &self.y.get_code() + "," + &self.z.get_code() + "]"
-    }
-}
-impl ScadType for na::Vector2<f32>
-{
-    fn get_code(&self) -> String
-    {
-        String::from("[") + &self.x.get_code() + "," + &self.y.get_code() + "]"
-    }
-}
-
-impl ScadType for f32
-{
-    fn get_code(&self) -> String 
-    {
-        self.to_string()
-    }
-}
-impl ScadType for i32
-{
-    fn get_code(&self) -> String 
-    {
-        self.to_string()
-    }
-}
-impl ScadType for bool
-{
-    fn get_code(&self) -> String 
-    {
-        self.to_string()
-    }
-}
 
 //Since scad allows creation of circle like objects using either radius or diameter,
 //this enum specifies which format to use
@@ -175,18 +133,7 @@ mod scad_tests
     extern crate nalgebra as na;
 
     use scad_element::*;
-
-    #[test]
-    fn type_test()
-    {
-        //No more tests needed for now. I assume the to_string() function works
-        //as expected
-        assert_eq!(na::Vector3::new(0.0, 0.0, 0.0).get_code(), "[0,0,0]");
-        assert_eq!(na::Vector3::new(-5.0, 0.0, 0.0).get_code(), "[-5,0,0]");
-        assert_eq!(na::Vector3::new(1.0,2.0,3.0).get_code(), "[1,2,3]");
-
-        assert_eq!(na::Vector2::new(1.0, 3.3).get_code(), "[1,3.3]");
-    }
+    use scad_type::*;
 
     #[test]
     fn simple_enum_test()

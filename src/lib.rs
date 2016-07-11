@@ -1,6 +1,7 @@
 mod scad_element;
 mod scad_object;
 mod scad_file;
+mod scad_type;
 
 #[macro_use]
 pub mod scad_macros;
@@ -11,3 +12,4 @@ pub use scad_element::ScadElement::*;
 pub use scad_element::CircleType::*;
 pub use scad_macros::*;
 pub use scad_file::*;
+pub use scad_type::*;
