@@ -40,6 +40,11 @@ pub fn vec3(x: f32, y: f32, z:f32) -> na::Vector3<f32>
     na::Vector3::new(x,y,z)
 }
 
+pub fn vec2(x: f32, y: f32) -> na::Vector2<f32>
+{
+    na::Vector2::new(x, y)
+}
+
 #[macro_export]
 macro_rules! qstruct
 {

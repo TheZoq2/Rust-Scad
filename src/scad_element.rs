@@ -15,7 +15,29 @@ impl ScadType for na::Vector3<f32>
         String::from("[") + &self.x.get_code() + "," + &self.y.get_code() + "," + &self.z.get_code() + "]"
     }
 }
+impl ScadType for na::Vector2<f32>
+{
+    fn get_code(&self) -> String
+    {
+        String::from("[") + &self.x.get_code() + "," + &self.y.get_code() + "]"
+    }
+}
+
 impl ScadType for f32
+{
+    fn get_code(&self) -> String 
+    {
+        self.to_string()
+    }
+}
+impl ScadType for i32
+{
+    fn get_code(&self) -> String 
+    {
+        self.to_string()
+    }
+}
+impl ScadType for bool
 {
     fn get_code(&self) -> String 
     {
@@ -31,6 +53,44 @@ pub enum CircleType {
     Diameter(f32),
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+#[derive(Clone)]
+pub struct LinExtrudeParams 
+{
+    height: f32,
+    center: bool,
+    convexity: i32,
+    twist: f32,
+    slices: i32,
+}
+
+impl Default for LinExtrudeParams
+{
+    fn default() -> LinExtrudeParams
+    {
+        LinExtrudeParams
+        {
+            height: 1.,
+            center: true,
+            convexity: 10,
+            twist: 0.,
+            slices: 20,
+        }
+    }
+}
+
+impl ScadType for LinExtrudeParams
+{
+    fn get_code(&self) -> String 
+    {
+        String::from("height=") + &self.height.get_code() + ",center=" + &self.center.get_code() +
+            ",convecity=" + &self.convexity.get_code() + ",twist=" + &self.twist.get_code() + 
+            ",slices=" + &self.slices.get_code()
+    }
+}
+/////////////////////////////////////////////////////////////////////////////
+
 //Openscad modules or functions
 #[derive(Clone)]
 pub enum ScadElement {
@@ -39,6 +99,7 @@ pub enum ScadElement {
     Scale(na::Vector3<f32>),
     Rotate(f32, na::Vector3<f32>),
     Mirror(na::Vector3<f32>),
+    LinearExtrude(LinExtrudeParams),
 
     Difference,
     Union,
@@ -48,6 +109,9 @@ pub enum ScadElement {
     //Object stuff
     Cube(na::Vector3<f32>),
     Cylinder(f32, CircleType),
+
+    //2D stuff
+    Square(na::Vector2<f32>),
 }
 
 impl ScadElement
@@ -69,6 +133,9 @@ impl ScadElement
             ScadElement::Mirror(vector) => {
                 String::from("mirror(") + &vector.get_code() + ")"
             },
+            ScadElement::LinearExtrude(params) => {
+                String::from("linear_extrude(") + &params.get_code() + ")"
+            }
 
             //Primitive objects
             ScadElement::Cube(value) => {
@@ -84,6 +151,11 @@ impl ScadElement
                 String::from("cylinder(h=") + &height.get_code() + "," + &width_str + ")"
             },
 
+            //primitive 2d objects
+            ScadElement::Square(value) => {
+                String::from("square(") + &value.get_code() + ")"
+            },
+
 
             //Combination constructs
             ScadElement::Difference => String::from("difference()"),
@@ -93,6 +165,7 @@ impl ScadElement
         }
     }
 }
+/////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -111,6 +184,8 @@ mod scad_tests
         assert_eq!(na::Vector3::new(0.0, 0.0, 0.0).get_code(), "[0,0,0]");
         assert_eq!(na::Vector3::new(-5.0, 0.0, 0.0).get_code(), "[-5,0,0]");
         assert_eq!(na::Vector3::new(1.0,2.0,3.0).get_code(), "[1,2,3]");
+
+        assert_eq!(na::Vector2::new(1.0, 3.3).get_code(), "[1,3.3]");
     }
 
     #[test]
@@ -122,5 +197,15 @@ mod scad_tests
 
         assert_eq!(ScadElement::Cylinder(5.0, CircleType::Radius(7.0)).get_code(), "cylinder(h=5,r=7)");
         assert_eq!(ScadElement::Cylinder(5.0, CircleType::Diameter(7.0)).get_code(), "cylinder(h=5,d=7)");
+
+        assert_eq!(ScadElement::Square(na::Vector2::new(1.,2.)).get_code(), "square([1,2])");
+    }
+
+    #[test]
+    fn lin_extrude_test()
+    {
+        assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=true,convecity=10,twist=0,slices=20");
+
+        assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=true,convecity=10,twist=720,slices=20");
     }
 }
