@@ -69,7 +69,7 @@ pub enum ScadElement {
     //Object stuff
     Cube(na::Vector3<f32>),
     Cylinder(f32, CircleType),
-    Polyhedron(Vec<na::Vector3<f32>>, Vec<i32>),
+    Polyhedron(Vec<na::Vector3<f32>>, Vec<Vec<i32>>),
 
     //2D stuff
     Square(na::Vector2<f32>),
