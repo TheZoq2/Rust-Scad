@@ -1,27 +1,45 @@
 extern crate nalgebra as na;
 
-///Creates an scad module with optional children with the following syntax:
-///scad!(parent);
-///
-///or
-///
-///scad!(parent;{child1 ... });
-#[macro_export]
-macro_rules! scad {
-    ($parent:expr) => {ScadObject::new($parent)};
+/**
+    Creates an scad object with optional children
 
-    ($parent:expr;{$($child:expr),*$(),+}) => {
-        {
-            let mut tmp_stmt = ScadObject::new($parent);
+    #Examples
+    ```
+    # #[macro_use]
+    # extern crate scad_generator;
 
-            $(
-                tmp_stmt.add_child($child);
-            )*
+    # use scad_generator::*;
 
-            tmp_stmt
-        }
-    };
+    # fn main(){
+         //No children
+         let cube = scad!(Cube(vec3(1., 1., 1.)));
+
+         //One parent with several children
+         scad!(Difference;
+         {
+             cube,
+             scad!(Cube(vec3(2., 1., 1.))),
+         });
+     # }
+    ```
+
+    #[macro_export]
+    macro_rules! scad {
+        ($parent:expr) => {ScadObject::new($parent)};
+
+        ($parent:expr;{$($child:expr),*$(),+}) => {
+            {
+                let mut tmp_stmt = ScadObject::new($parent);
+
+                $(
+                    tmp_stmt.add_child($child);
+                )*
+
+                tmp_stmt
+            }
+        };
 }
+*/
 
 pub fn vec3(x: f32, y: f32, z:f32) -> na::Vector3<f32>
 {
