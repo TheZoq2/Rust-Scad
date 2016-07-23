@@ -22,24 +22,24 @@ extern crate nalgebra as na;
          });
      # }
     ```
-
-    #[macro_export]
-    macro_rules! scad {
-        ($parent:expr) => {ScadObject::new($parent)};
-
-        ($parent:expr;{$($child:expr),*$(),+}) => {
-            {
-                let mut tmp_stmt = ScadObject::new($parent);
-
-                $(
-                    tmp_stmt.add_child($child);
-                )*
-
-                tmp_stmt
-            }
-        };
-}
 */
+
+#[macro_export]
+macro_rules! scad {
+    ($parent:expr) => {ScadObject::new($parent)};
+
+    ($parent:expr;{$($child:expr),*$(),+}) => {
+        {
+            let mut tmp_stmt = ScadObject::new($parent);
+
+            $(
+                tmp_stmt.add_child($child);
+            )*
+
+            tmp_stmt
+        }
+    };
+}
 
 pub fn vec3(x: f32, y: f32, z:f32) -> na::Vector3<f32>
 {
