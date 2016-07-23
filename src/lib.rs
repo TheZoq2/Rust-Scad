@@ -24,7 +24,7 @@
         sfile.set_detail(50);
 
         //Create an scad object
-        let cube = scad!(Translate(vec3(2.0, 2.0, 3.0));
+        let mut cube = scad!(Translate(vec3(2.0, 2.0, 3.0));
                 {
                     scad!(Cube(vec3(2.0,1.0,4.0)))
                 });
@@ -36,12 +36,12 @@
         cube.add_child(cylinder);
         
         //Add the cube object to the file
-        sfile.add_object(cube);
+        sfile.add_object(cube.clone());
         //Save the scad code to a file
         sfile.write_to_file(String::from("out.scad"));
 
         //You can also print the code for the object manually since it's just a string
-        println!("{}", cube.get_code());
+        println!("{}", scad!(Cube(vec3(5., 3.,  2.))).get_code());
     }
     ```
 
@@ -66,7 +66,7 @@
     # use scad_generator::*;
     
     # fn main(){
-        scad!(Cube(vec3(10., 10., 10.)))
+        scad!(Cube(vec3(10., 10., 10.)));
     # }
     ```
 
@@ -113,6 +113,8 @@
 
 mod scad_element;
 mod scad_object;
+mod scad_file;
+mod scad_type;
 
 #[macro_use]
 pub mod scad_macros;
@@ -123,3 +125,5 @@ pub use scad_element::ScadElement::*;
 pub use scad_element::CircleType::*;
 pub use scad_macros::*;
 
+pub use scad_file::*;
+pub use scad_type::*;
