@@ -76,39 +76,71 @@
     of the `ScadObject`. The children should be separated by `;`.
 
     ```
-    //# #[macro_use]
-    //# extern crate scad_generator;
-    //let child = scad!(Cylinder(10., Radius(3.)));
+    # #[macro_use]
+    # extern crate scad_generator;
+    # use scad_generator::*;
 
-    //scad!(Difference;{
-    //    //A child can be another call to the scad! macro
-    //    scad!(Cube(vec3(1., 2., 3.)));
-    //    //or a variable that is an scad object
-    //    child;
-    //    //Or even a function that returns an scad objectj
-    //    get_child();
-    //});
+    # fn main()
+    # {
+        let child = scad!(Cylinder(10., Radius(3.)));
 
-    //fn get_child() -> ScadObject
-    //{
-    ////...
-    //# unimplemented!();
-    //}
+        scad!(Difference;{
+            //A child can be another call to the scad! macro
+            scad!(Cube(vec3(1., 2., 3.))),
+            //or a variable that is an scad object
+            child,
+            //Or even a function that returns an scad object
+            get_child(),
+        });
+
+        fn get_child() -> ScadObject
+        {
+        //...
+        # scad!(Union)
+        }
+    # }
     ```
 
     ##Object parameters
-    Almost all `ScadElements` take additional parameters that describes them.
+    Almost all `ScadElements` take additional parameters that describe them. They 
+    are enum parameters so you specify them as you would with enums. Some parameters
+    are regular built in types like `f32` but there are some special ones which are 
+    described below.
 
     ###Vectors
     The most common parameter is a vector. This library uses the nalgebra crate for vectors
     but writing `na::Vector3::new(x, y, z)` each time you want a vector is tedious which is 
-    why I have created simple utility functions. `vec3(x, y, z)` and `vec2(x, y)` are simply
+    why the library contains the functions `vec3(x, y, z)` and `vec2(x, y)`. They are simply
     functions that call the equivalent nalgebra constructor.
 
     ###Circle radii and diameters.
     Just like regular OpenSCAD, you can create round objects by either specifying the diameter
     or radius of the circle. This is done using the `CircleType` enum which is either 
     `Diameter(d)` or `Radius(r)`. 
+
+    ##Creating objects in loops
+    In most cases, the `scad!` macro should be good enoough to create objects, but one
+    case where it is not,  is when you want to create several objects in a loop and 
+    add them as children to a specific object. In this case, you have to use the 
+    `add_child` method of the `ScadObject`  struct manually
+
+    ```
+    # #[macro_use]
+    # extern crate scad_generator;
+    # use scad_generator::*;
+
+    # fn main()
+    # {
+        //Create the parent and make sure its mutable
+        let mut parent = scad!(Union);
+
+        for i in 0..3
+        {
+            parent.add_child(scad!(Cube(vec3(0., i as f32, 0.))));
+        }
+    # }
+    
+    ```
 */
 
 mod scad_element;
