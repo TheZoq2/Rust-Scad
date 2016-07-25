@@ -46,11 +46,13 @@ scad_generator = {git = "https://github.com/TheZoq2/Rust-Scad.git"}
 ```
 
 And import the crate.
-```
+```Rust
 #[macro_use]
 extern crate scad_generator;
 use scad_generator::*;
 ```
+
+See the documentation for a tutorial.
 
 ##Documentation
 
@@ -60,3 +62,14 @@ yourself.
 
 The documentation can be built using `cargo doc`. Then you can open the documentation
 in `target/doc/scad_generator/index.html`
+
+You can also have a look [https://github.com/TheZoq2/Z-Plane](https://github.com/TheZoq2/Z-Plane) at my RC plane repo for 
+an example project that is using the library.
+
+##Utility repo
+Since including dependencies in rust projects using cargo is so simple, I have a repository
+with some standard objects like nuts, screws and some RC things like servos in a separate
+repo which you can also include using cargo. For now it's undocumented but I will get 
+around to that eventually.
+
+[https://github.com/TheZoq2/Rust-scad-util](https://github.com/TheZoq2/Rust-scad-util)
