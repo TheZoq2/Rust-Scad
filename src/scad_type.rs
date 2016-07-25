@@ -2,7 +2,7 @@ extern crate nalgebra as na;
 
 use std::vec::Vec;
 
-//Trait for converting from rust types to strings compatible with openscad
+///Trait for converting from rust types to strings compatible with openscad
 pub trait ScadType 
 {
     fn get_code(&self) -> String;

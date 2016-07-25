@@ -37,4 +37,26 @@ as you would expect in most programming languages.
 My library works around this issue by using rust to do all logic and generate simple 
 scad code which accomplishes the same thing as more complex scad code would. 
 
+##Usage
+
+Add the following to your cargo.toml.
+```
+[dependencies]
+scad_generator = {git = "https://github.com/TheZoq2/Rust-Scad.git"}
+```
+
+And import the crate.
+```
+#[macro_use]
+extern crate scad_generator;
+use scad_generator::*;
+```
+
 ##Documentation
+
+I will publish the documentation somewhere in a few days when I get home and have access
+to a non data capped internet connection. For now you have to build the documentation 
+yourself.
+
+The documentation can be built using `cargo doc`. Then you can open the documentation
+in `target/doc/scad_generator/index.html`

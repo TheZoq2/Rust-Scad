@@ -5,8 +5,8 @@ extern crate nalgebra as na;
 use std::vec::Vec;
 
 
-//Since scad allows creation of circle like objects using either radius or diameter,
-//this enum specifies which format to use
+///Since scad allows creation of circle like objects using either radius or diameter,
+///this enum specifies which format to use
 #[derive(Clone)]
 pub enum CircleType {
     Radius(f32),
@@ -15,6 +15,11 @@ pub enum CircleType {
 
 
 /////////////////////////////////////////////////////////////////////////////
+
+///Parameters for the linear extrude function.
+///
+///These are in a struct because  there are so many of them and
+///most of them  can have a default value.
 #[derive(Clone)]
 pub struct LinExtrudeParams 
 {
@@ -51,7 +56,11 @@ impl ScadType for LinExtrudeParams
 }
 /////////////////////////////////////////////////////////////////////////////
 
-//Openscad modules or functions
+///Different kinds of scad modules and function. These are parameters
+///for `ScadObjects`.
+///
+///Most of these have  the same name as the openscad counterparts so see
+///their documentation for details
 #[derive(Clone)]
 pub enum ScadElement {
     //Transformation stuff
@@ -77,6 +86,7 @@ pub enum ScadElement {
 
 impl ScadElement
 {
+    ///Returns scad code for each of the elements
     pub fn get_code(self) -> String 
     {
         match self
