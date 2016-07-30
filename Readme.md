@@ -39,52 +39,37 @@ scad code which accomplishes the same thing as more complex scad code would.
 
 ##Usage
 
-First, let's look at a simple example of the crate being used.
+Add the following to your cargo.toml.
+```
+[dependencies]
+scad_generator = {git = "https://github.com/TheZoq2/Rust-Scad.git"}
+```
 
+And import the crate.
 ```Rust
-//"Import" the module along with the macros
 #[macro_use]
 extern crate scad_generator;
-
-//Avoid having to write scad_generator:: everywhere
 use scad_generator::*;
-
-pub fn main()
-{
-    //Create an scad object
-    let translation = scad!(Translate(vec3(2.0, 2.0, 3.0));
-            {
-                scad!(Cube(vec3(2.0,1.0,4.0)))
-            }
-        );
-
-
-    //Print the result
-    println!("{}", translation.get_code());
-}
 ```
 
-Which will print the following openscad code
-```OpenSCAD
-translate([2,2,3])
-{
-	cube([2,1,4]);
-}
-```
+See the documentation for a tutorial.
 
-The interesting part is the `scad!` macro
+##Documentation
 
-###The scad! macro
-The `scad!` macro creates a new scad object with optional children. An scad 
-object consists of a number of a parent with 0 or more children. The scad! macro 
-takes one parent "object" followed by a `;` optionally followed by `{}`. The expression
-returned by the macro is an instance of ScadObject.
+I will publish the documentation somewhere in a few days when I get home and have access
+to a non data capped internet connection. For now you have to build the documentation 
+yourself.
 
-The children should be instances of ScadObjects aswell which means that you can create
-children directly inside the macro using another call to the `scad!` macro or use 
-a variable created earlier.
+The documentation can be built using `cargo doc`. Then you can open the documentation
+in `target/doc/scad_generator/index.html`
 
-The parent part of the macro takes an instance from the ScadElement enum which specifies
-what type of scad object should be created. 
+You can also have a look [https://github.com/TheZoq2/Z-Plane](https://github.com/TheZoq2/Z-Plane) at my RC plane repo for 
+an example project that is using the library.
 
+##Utility repo
+Since including dependencies in rust projects using cargo is so simple, I have a repository
+with some standard objects like nuts, screws and some RC things like servos in a separate
+repo which you can also include using cargo. For now it's undocumented but I will get 
+around to that eventually.
 
+[https://github.com/TheZoq2/Rust-scad-util](https://github.com/TheZoq2/Rust-scad-util)

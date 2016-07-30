@@ -2,6 +2,39 @@ use scad_element::*;
 
 use std::vec::*;
 
+/**
+    An scad object which is a single scad element and can have zero or more child objects
+
+    #How it works
+    An scad object is a single `ScadElement` optionally followed by any number of child
+    objects. This represents the following scad code:
+
+    ```SCAD
+    translate([1,2,3]) //parent
+    {
+        cube([3,5,1]); //Child
+        //...
+    }
+    ```
+
+    Without using the `scad!` macro, you would create an scad object by doing the 
+    following.
+
+    ```
+    # use scad_generator::*;
+    //Create the parent
+    let mut obj = ScadObject::new(ScadElement::Union);
+
+    //add some children
+    obj.add_child(ScadObject::new(ScadElement::Cube(vec3(1., 1., 1.))));
+    //...
+    ```
+
+    This would be quite tedious to type each time you want to create a new object
+    which is why the `scad!` macro exists. This does mean that if you want to add
+    more children to an scad object created by the macro, you can simply use the 
+    `add_child` function on the result of the macro. 
+*/
 #[derive(Clone)]
 pub struct ScadObject 
 {
@@ -31,7 +64,14 @@ impl ScadObject
         self.children.push(statement);
     }
 
-    //Returns the code for the current statement
+    /**
+      Returns the scad code for the object. 
+
+      If there are no children, only the code for the ScadElement of the 
+      object followed by a `;` is returned. If children exist, the code for 
+      the element is returned first, followed by the code for each child surrounded
+      by `{}` and indented 1 tab character.
+    */
     pub fn get_code(&self) -> String 
     {
         let mut result: String;
@@ -65,16 +105,15 @@ impl ScadObject
         return result;
     }
 
+    /**
+      Marks the object as important. This will prepend the object code
+      with an ! which tells scad to only render that object and its children.
+    */
     pub fn is_important(&mut self)
     {
         self.important = true;
     }
 }
-
-
-
-
-
 
 #[cfg(test)]
 mod statement_tests
