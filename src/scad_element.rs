@@ -69,6 +69,8 @@ pub enum ScadElement {
     //Object stuff
     Cube(na::Vector3<f32>),
     Cylinder(f32, CircleType),
+    Sphere(CircleType),
+    Cone(f32, CircleType, CircleType),
     Polyhedron(Vec<na::Vector3<f32>>, Vec<Vec<i32>>),
 
     //2D stuff
@@ -114,6 +116,29 @@ impl ScadElement
             ScadElement::Polyhedron(points,faces) => {
                 String::from("polyhedron(points=") + &points.get_code() +",faces=" + &faces.get_code() + ")"
             },
+            ScadElement::Sphere(size) => {
+                let size_str = match size
+                {
+                    CircleType::Radius(val) => String::from("r=") + &val.get_code(),
+                    CircleType::Diameter(val) => String::from("d=") + &val.get_code(),
+                };
+
+                String::from("sphere(") + &size_str + ")"
+            },
+            ScadElement::Cone(height, size1, size2) => {
+                let size1_str = match size1
+                {
+                    CircleType::Radius(val) => String::from("r1=") + &val.get_code(),
+                    CircleType::Diameter(val) => String::from("d1=") + &val.get_code(),
+                };
+                let size2_str = match size2
+                {
+                    CircleType::Radius(val) => String::from("r2=") + &val.get_code(),
+                    CircleType::Diameter(val) => String::from("d2=") + &val.get_code(),
+                };
+
+                String::from("cylinder(h=") + &height.get_code() + "," + &size1_str + "," + &size2_str + ")"
+            }
 
             //primitive 2d objects
             ScadElement::Square(value) => {
@@ -152,6 +177,12 @@ mod scad_tests
         assert_eq!(ScadElement::Cylinder(5.0, CircleType::Diameter(7.0)).get_code(), "cylinder(h=5,d=7)");
 
         assert_eq!(ScadElement::Square(na::Vector2::new(1.,2.)).get_code(), "square([1,2])");
+
+        assert_eq!(ScadElement::Sphere(CircleType::Radius(7.)).get_code(), "sphere(r=7)");
+        assert_eq!(ScadElement::Sphere(CircleType::Diameter(7.)).get_code(), "sphere(d=7)");
+
+        assert_eq!(ScadElement::Cone(5., CircleType::Radius(7.), CircleType::Radius(14.)).get_code(), "cylinder(h=5,r1=7,r2=14)");
+        assert_eq!(ScadElement::Cone(5., CircleType::Diameter(7.), CircleType::Diameter(14.)).get_code(), "cylinder(h=5,d1=7,d2=14)");
     }
 
     #[test]
