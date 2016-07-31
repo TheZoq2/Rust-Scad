@@ -80,7 +80,9 @@ pub enum ScadElement {
     Cylinder(f32, CircleType),
     Sphere(CircleType),
     Cone(f32, CircleType, CircleType),
+    
     Polyhedron(Vec<na::Vector3<f32>>, Vec<Vec<i32>>),
+    Import(String),
 
     //2D stuff
     Square(na::Vector2<f32>),
@@ -123,9 +125,6 @@ impl ScadElement
 
                 String::from("cylinder(h=") + &height.get_code() + "," + &width_str + ")"
             },
-            ScadElement::Polyhedron(points,faces) => {
-                String::from("polyhedron(points=") + &points.get_code() +",faces=" + &faces.get_code() + ")"
-            },
             ScadElement::Sphere(size) => {
                 let size_str = match size
                 {
@@ -149,6 +148,13 @@ impl ScadElement
 
                 String::from("cylinder(h=") + &height.get_code() + "," + &size1_str + "," + &size2_str + ")"
             }
+
+            ScadElement::Polyhedron(points,faces) => {
+                String::from("polyhedron(points=") + &points.get_code() +",faces=" + &faces.get_code() + ")"
+            },
+            ScadElement::Import(path) => {
+                String::from("import('") + &path + "')"
+            },
 
             //primitive 2d objects
             ScadElement::Square(value) => {
@@ -193,6 +199,8 @@ mod scad_tests
 
         assert_eq!(ScadElement::Cone(5., CircleType::Radius(7.), CircleType::Radius(14.)).get_code(), "cylinder(h=5,r1=7,r2=14)");
         assert_eq!(ScadElement::Cone(5., CircleType::Diameter(7.), CircleType::Diameter(14.)).get_code(), "cylinder(h=5,d1=7,d2=14)");
+
+        assert_eq!(ScadElement::Import("hello_world.stl".to_string()).get_code(), "import('hello_world.stl')");
     }
 
     #[test]

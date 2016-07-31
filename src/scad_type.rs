@@ -1,6 +1,7 @@
 extern crate nalgebra as na;
 
 use std::vec::Vec;
+use std::string::String;
 
 ///Trait for converting from rust types to strings compatible with openscad
 pub trait ScadType 
@@ -59,6 +60,14 @@ impl<T: ScadType> ScadType for Vec<T>
         result = result + "]";
 
         result
+    }
+}
+
+impl ScadType for String
+{
+    fn get_code(&self) -> String
+    {
+        self.clone()
     }
 }
 
