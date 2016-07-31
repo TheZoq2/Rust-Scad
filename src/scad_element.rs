@@ -153,7 +153,7 @@ impl ScadElement
                 String::from("polyhedron(points=") + &points.get_code() +",faces=" + &faces.get_code() + ")"
             },
             ScadElement::Import(path) => {
-                String::from("import('") + &path + "')"
+                String::from("import(\"") + &path + "\")"
             },
 
             //primitive 2d objects
@@ -200,7 +200,7 @@ mod scad_tests
         assert_eq!(ScadElement::Cone(5., CircleType::Radius(7.), CircleType::Radius(14.)).get_code(), "cylinder(h=5,r1=7,r2=14)");
         assert_eq!(ScadElement::Cone(5., CircleType::Diameter(7.), CircleType::Diameter(14.)).get_code(), "cylinder(h=5,d1=7,d2=14)");
 
-        assert_eq!(ScadElement::Import("hello_world.stl".to_string()).get_code(), "import('hello_world.stl')");
+        assert_eq!(ScadElement::Import("hello_world.stl".to_string()).get_code(), "import(\"hello_world.stl\")");
     }
 
     #[test]
