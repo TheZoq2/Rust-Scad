@@ -82,6 +82,7 @@ pub enum ScadElement {
     Cone(f32, CircleType, CircleType),
     
     Polyhedron(Vec<na::Vector3<f32>>, Vec<Vec<i32>>),
+    Polygon(Vec<na::Vector2<f32>>, Vec<Vec<i32>>),
     Import(String),
 
     //2D stuff
@@ -161,6 +162,10 @@ impl ScadElement
                 String::from("square(") + &value.get_code() + ")"
             },
 
+            ScadElement::Polygon(points,faces) => {
+                String::from("polygon(points=") + &points.get_code() +",paths=" + &faces.get_code() + ",convexity=10)"
+            },
+
 
             //Combination constructs
             ScadElement::Difference => String::from("difference()"),
@@ -209,5 +214,21 @@ mod scad_tests
         assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=true,convecity=10,twist=0,slices=20");
 
         assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=true,convecity=10,twist=720,slices=20");
+    }
+
+    #[test]
+    fn polygon_test()
+    {
+        assert_eq!(
+            ScadElement::Polygon(
+                vec!(
+                    na::Vector2::<f32>::new(0., 0.), 
+                    na::Vector2::<f32>::new(0., 1.),
+                    na::Vector2::<f32>::new(1., 0.)
+                ), 
+                vec!(
+                    vec!(0, 1), vec!(1,2), vec!(2,0)
+                )
+            ).get_code() , "polygon(points=[[0,0],[0,1],[1,0],],paths=[[0,1,],[1,2,],[2,0,],],convexity=10)");
     }
 }
