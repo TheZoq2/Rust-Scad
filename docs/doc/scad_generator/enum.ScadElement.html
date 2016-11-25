@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ScadElement` enum in crate `scad_generator`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ScadElement">
+
+    <title>scad_generator::ScadElement - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>scad_generator</a></p><script>window.sidebarCurrent = {name: 'ScadElement', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content enum">
+<h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>scad_generator</a>::<wbr><a class='enum' href=''>ScadElement</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-38' class='srclink' href='../src/scad_generator/src/scad_element.rs.html#65-90' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum ScadElement {
+    Translate(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;),
+    Scale(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;),
+    Rotate(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>,&nbsp;<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;),
+    Mirror(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;),
+    LinearExtrude(<a class='struct' href='../scad_generator/struct.LinExtrudeParams.html' title='scad_generator::LinExtrudeParams'>LinExtrudeParams</a>),
+    Difference,
+    Union,
+    Hull,
+    Intersection,
+    Cube(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;),
+    Cylinder(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>,&nbsp;<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>),
+    Sphere(<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>),
+    Cone(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>,&nbsp;<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>,&nbsp;<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>),
+    Polyhedron(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;&gt;,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;&gt;),
+    Polygon(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../nalgebra/structs/vector/struct.Vector2.html' title='nalgebra::structs::vector::Vector2'>Vector2</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;&gt;,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;&gt;),
+    Import(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>),
+    Square(<a class='struct' href='../nalgebra/structs/vector/struct.Vector2.html' title='nalgebra::structs::vector::Vector2'>Vector2</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;),
+}</pre><div class='docblock'><p>Different kinds of scad modules and function. These are parameters
+for <code>ScadObjects</code>.</p>
+
+<p>Most of these have  the same name as the openscad counterparts so see
+their documentation for details</p>
+</div><h2 class='variants'>Variants</h2>
+<span id='variant.Translate' class='variant'><span id='Translate.v' class='invisible'><code>Translate(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;)</code></span></span><span id='variant.Scale' class='variant'><span id='Scale.v' class='invisible'><code>Scale(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;)</code></span></span><span id='variant.Rotate' class='variant'><span id='Rotate.v' class='invisible'><code>Rotate(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>,&nbsp;<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;)</code></span></span><span id='variant.Mirror' class='variant'><span id='Mirror.v' class='invisible'><code>Mirror(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;)</code></span></span><span id='variant.LinearExtrude' class='variant'><span id='LinearExtrude.v' class='invisible'><code>LinearExtrude(<a class='struct' href='../scad_generator/struct.LinExtrudeParams.html' title='scad_generator::LinExtrudeParams'>LinExtrudeParams</a>)</code></span></span><span id='variant.Difference' class='variant'><span id='Difference.v' class='invisible'><code>Difference</code></span></span><span id='variant.Union' class='variant'><span id='Union.v' class='invisible'><code>Union</code></span></span><span id='variant.Hull' class='variant'><span id='Hull.v' class='invisible'><code>Hull</code></span></span><span id='variant.Intersection' class='variant'><span id='Intersection.v' class='invisible'><code>Intersection</code></span></span><span id='variant.Cube' class='variant'><span id='Cube.v' class='invisible'><code>Cube(<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;)</code></span></span><span id='variant.Cylinder' class='variant'><span id='Cylinder.v' class='invisible'><code>Cylinder(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>,&nbsp;<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>)</code></span></span><span id='variant.Sphere' class='variant'><span id='Sphere.v' class='invisible'><code>Sphere(<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>)</code></span></span><span id='variant.Cone' class='variant'><span id='Cone.v' class='invisible'><code>Cone(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>,&nbsp;<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>,&nbsp;<a class='enum' href='../scad_generator/enum.CircleType.html' title='scad_generator::CircleType'>CircleType</a>)</code></span></span><span id='variant.Polyhedron' class='variant'><span id='Polyhedron.v' class='invisible'><code>Polyhedron(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../nalgebra/structs/vector/struct.Vector3.html' title='nalgebra::structs::vector::Vector3'>Vector3</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;&gt;,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;&gt;)</code></span></span><span id='variant.Polygon' class='variant'><span id='Polygon.v' class='invisible'><code>Polygon(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../nalgebra/structs/vector/struct.Vector2.html' title='nalgebra::structs::vector::Vector2'>Vector2</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;&gt;,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;&gt;)</code></span></span><span id='variant.Import' class='variant'><span id='Import.v' class='invisible'><code>Import(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>)</code></span></span><span id='variant.Square' class='variant'><span id='Square.v' class='invisible'><code>Square(<a class='struct' href='../nalgebra/structs/vector/struct.Vector2.html' title='nalgebra::structs::vector::Vector2'>Vector2</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>&gt;)</code></span></span><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='enum' href='../scad_generator/enum.ScadElement.html' title='scad_generator::ScadElement'>ScadElement</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-97' class='srclink' href='../src/scad_generator/src/scad_element.rs.html#92-177' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.get_code' class='method'><span id='get_code.v' class='invisible'><code>fn <a href='#method.get_code' class='fnname'>get_code</a>(self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></span></h4>
+<div class='docblock'><p>Returns scad code for each of the elements</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../scad_generator/enum.ScadElement.html' title='scad_generator::ScadElement'>ScadElement</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-75' class='srclink' href='../src/scad_generator/src/scad_element.rs.html#64' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../scad_generator/enum.ScadElement.html' title='scad_generator::ScadElement'>ScadElement</a></code></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "scad_generator";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

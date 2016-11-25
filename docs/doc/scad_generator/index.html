@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `scad_generator` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, scad_generator">
+
+    <title>scad_generator - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'scad_generator', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>scad_generator</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/scad_generator/src/lib.rs.html#1-161' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>This crate is used to generate openscad models using rust.</p>
+
+<h2 id='usage' class='section-header'><a href='#usage'>Usage</a></h2>
+<p>First, let&#39;s look at a simple example of the crate being used.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='comment'>//&quot;Import&quot; the module along with the macros</span>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>scad_generator</span>;
+
+<span class='comment'>//Avoid having to write scad_generator:: everywhere</span>
+<span class='kw'>use</span> <span class='ident'>scad_generator</span>::<span class='op'>*</span>;
+
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>main</span>()
+{
+    <span class='comment'>//Create an scad file object for storing the scad objects. This</span>
+    <span class='comment'>//allows us to set things like the detail level ($fn) for the models.</span>
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>sfile</span> <span class='op'>=</span> <span class='ident'>ScadFile</span>::<span class='ident'>new</span>();
+
+    <span class='comment'>//Sets the $fn variable in scad which controls the detail level of things</span>
+    <span class='comment'>//like spheres. Look at the scad wiki for details</span>
+    <span class='ident'>sfile</span>.<span class='ident'>set_detail</span>(<span class='number'>50</span>);
+
+    <span class='comment'>//Create an scad object</span>
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>cube</span> <span class='op'>=</span> <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Translate</span>(<span class='ident'>vec3</span>(<span class='number'>2.0</span>, <span class='number'>2.0</span>, <span class='number'>3.0</span>));
+            {
+                <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Cube</span>(<span class='ident'>vec3</span>(<span class='number'>2.0</span>,<span class='number'>1.0</span>,<span class='number'>4.0</span>)))
+            });
+
+    <span class='comment'>//Create a cylinder with a height of 10 and a diameter of 3 mm</span>
+    <span class='kw'>let</span> <span class='ident'>cylinder</span> <span class='op'>=</span> <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Cylinder</span>(<span class='number'>10.</span>, <span class='ident'>Diameter</span>(<span class='number'>3.</span>)));
+
+    <span class='comment'>//Add the cylinder to the cubes translation.</span>
+    <span class='ident'>cube</span>.<span class='ident'>add_child</span>(<span class='ident'>cylinder</span>);
+        
+    <span class='comment'>//Add the cube object to the file</span>
+    <span class='ident'>sfile</span>.<span class='ident'>add_object</span>(<span class='ident'>cube</span>.<span class='ident'>clone</span>());
+    <span class='comment'>//Save the scad code to a file</span>
+    <span class='ident'>sfile</span>.<span class='ident'>write_to_file</span>(<span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;out.scad&quot;</span>));
+
+    <span class='comment'>//You can also print the code for the object manually since it&#39;s just a string</span>
+    <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Cube</span>(<span class='ident'>vec3</span>(<span class='number'>5.</span>, <span class='number'>3.</span>,  <span class='number'>2.</span>))).<span class='ident'>get_code</span>());
+}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+
+<p>Which will print the following openscad code
+<code>OpenSCAD translate([2,2,3]) { cube([2,1,4]); Cylinder(h=10, r=3); }</code></p>
+
+<h2 id='the-scad-macro' class='section-header'><a href='#the-scad-macro'>The scad! macro</a></h2>
+<p>The most important part of the crate is the <code>scad!</code> macro. The first parameter
+of the macro is the element type of the object we want to create which should be 
+an instance of the <code>ScadElement</code> enum. If you only want to create a single scad
+object, you can simply end the macro invocation after the parent like this:</p>
+
+<pre class='rust rust-example-rendered'>
+    
+    <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Cube</span>(<span class='ident'>vec3</span>(<span class='number'>10.</span>, <span class='number'>10.</span>, <span class='number'>10.</span>)));<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+
+<p>A lot of times, you want to add more elements as children to an scad object. For example
+when translating a cube. If you want to add children to the object, add a <code>;</code> after the
+element type and surround all the children in <code>{}</code>. The children should be instances
+of the <code>ScadObject</code>. The children should be separated by <code>;</code>.</p>
+
+<pre class='rust rust-example-rendered'>
+
+    <span class='kw'>let</span> <span class='ident'>child</span> <span class='op'>=</span> <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Cylinder</span>(<span class='number'>10.</span>, <span class='ident'>Radius</span>(<span class='number'>3.</span>)));
+
+    <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Difference</span>;{
+        <span class='comment'>//A child can be another call to the scad! macro</span>
+        <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Cube</span>(<span class='ident'>vec3</span>(<span class='number'>1.</span>, <span class='number'>2.</span>, <span class='number'>3.</span>))),
+        <span class='comment'>//or a variable that is an scad object</span>
+        <span class='ident'>child</span>,
+        <span class='comment'>//Or even a function that returns an scad object</span>
+        <span class='ident'>get_child</span>(),
+    });
+
+    <span class='kw'>fn</span> <span class='ident'>get_child</span>() <span class='op'>-&gt;</span> <span class='ident'>ScadObject</span>
+    {
+    <span class='comment'>//...</span>
+    }<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+
+<h2 id='object-parameters' class='section-header'><a href='#object-parameters'>Object parameters</a></h2>
+<p>Almost all <code>ScadElements</code> take additional parameters that describe them. They 
+are enum parameters so you specify them as you would with enums. Some parameters
+are regular built in types like <code>f32</code> but there are some special ones which are 
+described below.</p>
+
+<h3 id='vectors' class='section-header'><a href='#vectors'>Vectors</a></h3>
+<p>The most common parameter is a vector. This library uses the nalgebra crate for vectors
+but writing <code>na::Vector3::new(x, y, z)</code> each time you want a vector is tedious which is 
+why the library contains the functions <code>vec3(x, y, z)</code> and <code>vec2(x, y)</code>. They are simply
+functions that call the equivalent nalgebra constructor.</p>
+
+<h3 id='circle-radii-and-diameters' class='section-header'><a href='#circle-radii-and-diameters'>Circle radii and diameters.</a></h3>
+<p>Just like regular OpenSCAD, you can create round objects by either specifying the diameter
+or radius of the circle. This is done using the <code>CircleType</code> enum which is either 
+<code>Diameter(d)</code> or <code>Radius(r)</code>. </p>
+
+<h2 id='creating-objects-in-loops' class='section-header'><a href='#creating-objects-in-loops'>Creating objects in loops</a></h2>
+<p>In most cases, the <code>scad!</code> macro should be good enoough to create objects, but one
+case where it is not,  is when you want to create several objects in a loop and 
+add them as children to a specific object. In this case, you have to use the 
+<code>add_child</code> method of the <code>ScadObject</code>  struct manually</p>
+
+<pre class='rust rust-example-rendered'>
+
+    <span class='comment'>//Create the parent and make sure its mutable</span>
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>parent</span> <span class='op'>=</span> <span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Union</span>);
+
+    <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>3</span>
+    {
+        <span class='ident'>parent</span>.<span class='ident'>add_child</span>(<span class='macro'>scad</span><span class='macro'>!</span>(<span class='ident'>Cube</span>(<span class='ident'>vec3</span>(<span class='number'>0.</span>, <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>f32</span>, <span class='number'>0.</span>))));
+    }
+    <a class='test-arrow' target='_blank' href=''>Run</a></pre>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use <a class='mod' href='../scad_generator/scad_macros/index.html' title='scad_generator::scad_macros'>scad_macros</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='scad_macros/index.html'
+                                  title='scad_generator::scad_macros'>scad_macros</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.qstruct.html'
+                                  title='scad_generator::qstruct'>qstruct</a></td>
+                           <td class='docblock-short'>
+                                <p>Used to create structs with ::new functions that set default values
+without having to write an impl for new. </p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.scad.html'
+                                  title='scad_generator::scad'>scad</a></td>
+                           <td class='docblock-short'>
+                                <p>Creates an scad object with optional children</p>
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.LinExtrudeParams.html'
+                                  title='scad_generator::LinExtrudeParams'>LinExtrudeParams</a></td>
+                           <td class='docblock-short'>
+                                <p>Parameters for the linear extrude function.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ScadFile.html'
+                                  title='scad_generator::ScadFile'>ScadFile</a></td>
+                           <td class='docblock-short'>
+                                <p>Object that stores scad objects along with global parameters for
+the objects. Also has methods for writing the  data to files.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ScadObject.html'
+                                  title='scad_generator::ScadObject'>ScadObject</a></td>
+                           <td class='docblock-short'>
+                                <p>An scad object which is a single scad element and can have zero or more child objects</p>
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.CircleType.html'
+                                  title='scad_generator::CircleType'>CircleType</a></td>
+                           <td class='docblock-short'>
+                                <p>Since scad allows creation of circle like objects using either radius or diameter,
+this enum specifies which format to use</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.ScadElement.html'
+                                  title='scad_generator::ScadElement'>ScadElement</a></td>
+                           <td class='docblock-short'>
+                                <p>Different kinds of scad modules and function. These are parameters
+for <code>ScadObjects</code>.</p>
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ScadType.html'
+                                  title='scad_generator::ScadType'>ScadType</a></td>
+                           <td class='docblock-short'>
+                                <p>Trait for converting from rust types to strings compatible with openscad</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "scad_generator";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
