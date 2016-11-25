@@ -40,6 +40,7 @@ macro_rules! scad {
         }
     };
 
+
     ($parent:expr;$($child:expr),*) => {
         {
             let mut tmp_stmt = ScadObject::new($parent);

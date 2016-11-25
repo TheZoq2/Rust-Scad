@@ -63,8 +63,6 @@ yourself.
 The documentation can be built using `cargo doc`. Then you can open the documentation
 in `target/doc/scad_generator/index.html`
 
-You can also have a look [https://github.com/TheZoq2/Z-Plane](https://github.com/TheZoq2/Z-Plane) at my RC plane repo for 
-an example project that is using the library.
 
 ##Utility repo
 Since including dependencies in rust projects using cargo is so simple, I have a repository
