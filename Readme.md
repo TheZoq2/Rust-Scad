@@ -55,13 +55,7 @@ use scad_generator::*;
 See the documentation for a tutorial.
 
 ##Documentation
-
-I will publish the documentation somewhere in a few days when I get home and have access
-to a non data capped internet connection. For now you have to build the documentation 
-yourself.
-
-The documentation can be built using `cargo doc`. Then you can open the documentation
-in `target/doc/scad_generator/index.html`
+The documentation  can be found at http://thezoq2.github.io/Rust-Scad/doc/scad_generator/index.html
 
 
 ##Utility repo
