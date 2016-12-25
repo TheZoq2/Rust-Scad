@@ -28,6 +28,9 @@ impl Cube
         }
     }
 
+    /**
+        Centers the cube on the specified axis
+    */
     pub fn center(mut self, x: bool, y: bool, z: bool) -> Cube
     {
         self.offset.x = if x {self.size.x} else {0.};
