@@ -80,13 +80,16 @@ pub enum ScadElement {
     Cylinder(f32, CircleType),
     Sphere(CircleType),
     Cone(f32, CircleType, CircleType),
-    
+
     Polyhedron(Vec<na::Vector3<f32>>, Vec<Vec<i32>>),
     Polygon(Vec<na::Vector2<f32>>, Vec<Vec<i32>>),
     Import(String),
 
     //2D stuff
     Square(na::Vector2<f32>),
+
+    Color(na::Vector3<f32>),
+    NamedColor(String),
 }
 
 impl ScadElement
@@ -166,6 +169,18 @@ impl ScadElement
                 String::from("polygon(points=") + &points.get_code() +",paths=" + &faces.get_code() + ",convexity=10)"
             },
 
+            //Colors
+            ScadElement::Color(value) => {
+                //Ensure that this is a valid color
+                assert!(value.x >= 0. && value.x <= 1.);
+                assert!(value.y >= 0. && value.y <= 1.);
+                assert!(value.z >= 0. && value.z <= 1.);
+
+                String::from("color(") + &value.get_code() + ")"
+            }
+            ScadElement::NamedColor(value) => {
+                String::from("color(") + &value + ")"
+            }
 
             //Combination constructs
             ScadElement::Difference => String::from("difference()"),
@@ -206,6 +221,9 @@ mod scad_tests
         assert_eq!(ScadElement::Cone(5., CircleType::Diameter(7.), CircleType::Diameter(14.)).get_code(), "cylinder(h=5,d1=7,d2=14)");
 
         assert_eq!(ScadElement::Import("hello_world.stl".to_string()).get_code(), "import(\"hello_world.stl\")");
+
+        assert_eq!(ScadElement::Color(na::zero()).get_code(), "color([0,0,0])");
+        assert_eq!(ScadElement::NamedColor("aqua".to_string()).get_code(), "color(aqua)");
     }
 
     #[test]
