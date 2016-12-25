@@ -147,6 +147,7 @@ mod scad_element;
 mod scad_object;
 mod scad_file;
 mod scad_type;
+mod common_objects;
 
 #[macro_use]
 pub mod scad_macros;
@@ -159,3 +160,5 @@ pub use scad_macros::*;
 
 pub use scad_file::*;
 pub use scad_type::*;
+
+pub use common_objects::*;

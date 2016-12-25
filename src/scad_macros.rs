@@ -72,6 +72,7 @@ pub fn vec2(x: f32, y: f32) -> na::Vector2<f32>
     na::Vector2::new(x, y)
 }
 
+
 /**
     Used to create structs with ::new functions that set default values
     without having to write an impl for new. 
