@@ -67,7 +67,7 @@ impl ScadType for String
 {
     fn get_code(&self) -> String
     {
-        self.clone()
+        String::from("\"") + &self.clone() + "\""
     }
 }
 

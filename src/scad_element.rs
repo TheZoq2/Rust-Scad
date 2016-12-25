@@ -157,7 +157,7 @@ impl ScadElement
                 String::from("polyhedron(points=") + &points.get_code() +",faces=" + &faces.get_code() + ")"
             },
             ScadElement::Import(path) => {
-                String::from("import(\"") + &path + "\")"
+                String::from("import(") + &path.get_code() + ")"
             },
 
             //primitive 2d objects
@@ -179,7 +179,7 @@ impl ScadElement
                 String::from("color(") + &value.get_code() + ")"
             }
             ScadElement::NamedColor(value) => {
-                String::from("color(") + &value + ")"
+                String::from("color(") + &value.get_code() + ")"
             }
 
             //Combination constructs
@@ -223,7 +223,7 @@ mod scad_tests
         assert_eq!(ScadElement::Import("hello_world.stl".to_string()).get_code(), "import(\"hello_world.stl\")");
 
         assert_eq!(ScadElement::Color(na::zero()).get_code(), "color([0,0,0])");
-        assert_eq!(ScadElement::NamedColor("aqua".to_string()).get_code(), "color(aqua)");
+        assert_eq!(ScadElement::NamedColor("aqua".to_string()).get_code(), "color(\"aqua\")");
     }
 
     #[test]

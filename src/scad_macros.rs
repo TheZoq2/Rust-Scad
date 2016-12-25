@@ -117,7 +117,6 @@ pub fn vec2(x: f32, y: f32) -> na::Vector2<f32>
     
     # fn main(){}
     ```
-
 */
 #[macro_export]
 macro_rules! qstruct
