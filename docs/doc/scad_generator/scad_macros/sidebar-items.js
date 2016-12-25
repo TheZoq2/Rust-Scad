@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["vec2","Utility function for creating nalgebra vectors without having to write `na::Vector2::new(x,y)`"],["vec3","Utility function for creating nalgebra vectors without having to write `na::Vector3::new(x,y,z)`"]]});
