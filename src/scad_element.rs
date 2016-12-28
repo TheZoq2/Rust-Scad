@@ -55,6 +55,80 @@ impl ScadType for LinExtrudeParams
     }
 }
 /////////////////////////////////////////////////////////////////////////////
+/**
+  Parameters for the polygon function.
+ */
+#[derive(Clone)]
+enum PolygonPathType
+{
+    Default,
+    SingleVector(Vec<usize>),
+    MultipleVectors(Vec<Vec<usize>>),
+}
+impl ScadType for PolygonPathType
+{
+    fn get_code(&self) -> String
+    {
+        match *self
+        {
+            PolygonPathType::Default => String::from("undef"),
+            PolygonPathType::SingleVector(ref val) => val.get_code(),
+            PolygonPathType::MultipleVectors(ref val) => val.get_code()
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct PolygonParameters
+{
+    points: Vec<na::Vector2<f32>>,
+    path: PolygonPathType,
+    convexity: u64
+}
+
+impl PolygonParameters
+{
+    pub fn new(points: Vec<na::Vector2<f32>>) -> PolygonParameters
+    {
+        PolygonParameters {
+            points: points,
+            path: PolygonPathType::Default,
+            convexity: 10
+        }
+    }
+
+    pub fn single_vector_path(mut self, path: Vec<usize>) -> PolygonParameters
+    {
+        self.path = PolygonPathType::SingleVector(path);
+        self
+    }
+
+    pub fn multi_vector_path(mut self, path: Vec<Vec<usize>>) -> PolygonParameters
+    {
+        self.path = PolygonPathType::MultipleVectors(path);
+        self
+    }
+
+    pub fn convexity(mut self, convexity: u64) -> PolygonParameters
+    {
+        self.convexity = convexity;
+        self
+    }
+}
+
+impl ScadType for PolygonParameters
+{
+    fn get_code(&self) -> String
+    {
+        String::from("points=") 
+            + &self.points.get_code() 
+            + ",paths="
+            + &self.path.get_code()
+            + ",convexity="
+            + &self.convexity.get_code()
+    }
+}
+/////////////////////////////////////////////////////////////////////////////
 
 ///Different kinds of scad modules and function. These are parameters
 ///for `ScadObjects`.
@@ -232,6 +306,21 @@ mod scad_tests
         assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=true,convecity=10,twist=0,slices=1");
 
         assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=true,convecity=10,twist=720,slices=1");
+    }
+
+    #[test]
+    fn polygon_parameter_type()
+    {
+        assert_eq!(PolygonParameters::new(
+                vec!(na::Vector2::new(1., 1.))).get_code(),
+                "points=[[1,1],],paths=undef,convexity=10"
+            );
+        assert_eq!(PolygonParameters::new(vec!(na::Vector2::new(1., 1.)))
+                    .convexity(5)
+                    .single_vector_path(vec!(1))
+                    .get_code()
+                , "points=[[1,1],],paths=[1,],convexity=5"
+            );
     }
 
     #[test]

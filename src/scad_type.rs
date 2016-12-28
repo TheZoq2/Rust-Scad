@@ -38,6 +38,20 @@ impl ScadType for i32
         self.to_string()
     }
 }
+impl ScadType for usize
+{
+    fn get_code(&self) -> String 
+    {
+        self.to_string()
+    }
+}
+impl ScadType for u64
+{
+    fn get_code(&self) -> String 
+    {
+        self.to_string()
+    }
+}
 impl ScadType for bool
 {
     fn get_code(&self) -> String 
