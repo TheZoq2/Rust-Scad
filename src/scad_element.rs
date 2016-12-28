@@ -129,6 +129,25 @@ impl ScadType for PolygonParameters
     }
 }
 /////////////////////////////////////////////////////////////////////////////
+#[derive(Clone)]
+pub enum OffsetType
+{
+    Delta(f32),
+    Radius(f32)
+}
+
+impl ScadType for OffsetType
+{
+    fn get_code(&self) -> String
+    {
+        match *self
+        {
+            OffsetType::Delta(val) => String::from("delta=") + &val.get_code(),
+            OffsetType::Radius(val) => String::from("r=") + &val.get_code()
+        }
+    }
+}
+/////////////////////////////////////////////////////////////////////////////
 
 ///Different kinds of scad modules and function. These are parameters
 ///for `ScadObjects`.
@@ -156,11 +175,12 @@ pub enum ScadElement {
     Cone(f32, CircleType, CircleType),
 
     Polyhedron(Vec<na::Vector3<f32>>, Vec<Vec<i32>>),
-    Polygon(PolygonParameters),
     Import(String),
 
     //2D stuff
     Square(na::Vector2<f32>),
+    Polygon(PolygonParameters),
+    Offset(OffsetType, bool),
 
     Color(na::Vector3<f32>),
     NamedColor(String),
@@ -240,9 +260,15 @@ impl ScadElement
             },
 
             ScadElement::Polygon(parameters) => {
-                //String::from("polygon(points=") + &points.get_code() +",paths=" + &faces.get_code() + ",convexity=10)"
                 String::from("polygon(") + &parameters.get_code() + ")"
             },
+            ScadElement::Offset(offset_type, chamfer) =>{
+                String::from("offset(") 
+                    + &offset_type.get_code() 
+                    + ",chamfer="
+                    + &chamfer.get_code() 
+                    + ")"
+            }
 
             //Colors
             ScadElement::Color(value) => {
@@ -303,6 +329,9 @@ mod scad_tests
 
         assert_eq!(ScadElement::Color(na::zero()).get_code(), "color([0,0,0])");
         assert_eq!(ScadElement::NamedColor("aqua".to_string()).get_code(), "color(\"aqua\")");
+
+        assert_eq!(ScadElement::Offset(OffsetType::Delta(5.), false).get_code()
+                   , "offset(delta=5,chamfer=false)");
     }
 
     #[test]
