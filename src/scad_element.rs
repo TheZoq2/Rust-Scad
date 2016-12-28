@@ -182,6 +182,10 @@ pub enum ScadElement {
     Polygon(PolygonParameters),
     Offset(OffsetType, bool),
 
+    Rotate2d(f32),
+    Translate2d(na::Vector2<f32>),
+    Scale2d(na::Vector2<f32>),
+
     Color(na::Vector3<f32>),
     NamedColor(String),
 }
@@ -268,6 +272,16 @@ impl ScadElement
                     + ",chamfer="
                     + &chamfer.get_code() 
                     + ")"
+            }
+
+            ScadElement::Rotate2d(angle) => {
+                String::from("rotate(") + &angle.get_code() + ")"
+            }
+            ScadElement::Translate2d(position) => {
+                String::from("translate(") + &position.get_code() + ")"
+            }
+            ScadElement::Scale2d(scale) => {
+                String::from("scale(") + &scale.get_code() + ")"
             }
 
             //Colors
@@ -357,4 +371,15 @@ mod scad_tests
             );
     }
 
+    #[test]
+    fn test_2d()
+    {
+        assert_eq!(ScadElement::Rotate2d(90.).get_code(), "rotate(90)");
+        assert_eq!(
+            ScadElement::Translate2d(na::Vector2::new(1., 1.)).get_code()
+            , "translate([1,1])");
+        assert_eq!(
+            ScadElement::Scale2d(na::Vector2::new(1., 1.)).get_code()
+            , "scale([1,1])");
+    }
 }
