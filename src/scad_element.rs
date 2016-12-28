@@ -156,7 +156,7 @@ pub enum ScadElement {
     Cone(f32, CircleType, CircleType),
 
     Polyhedron(Vec<na::Vector3<f32>>, Vec<Vec<i32>>),
-    Polygon(Vec<na::Vector2<f32>>, Vec<Vec<i32>>),
+    Polygon(PolygonParameters),
     Import(String),
 
     //2D stuff
@@ -239,8 +239,9 @@ impl ScadElement
                 String::from("square(") + &value.get_code() + ")"
             },
 
-            ScadElement::Polygon(points,faces) => {
-                String::from("polygon(points=") + &points.get_code() +",paths=" + &faces.get_code() + ",convexity=10)"
+            ScadElement::Polygon(parameters) => {
+                //String::from("polygon(points=") + &points.get_code() +",paths=" + &faces.get_code() + ",convexity=10)"
+                String::from("polygon(") + &parameters.get_code() + ")"
             },
 
             //Colors
@@ -295,6 +296,10 @@ mod scad_tests
         assert_eq!(ScadElement::Cone(5., CircleType::Diameter(7.), CircleType::Diameter(14.)).get_code(), "cylinder(h=5,d1=7,d2=14)");
 
         assert_eq!(ScadElement::Import("hello_world.stl".to_string()).get_code(), "import(\"hello_world.stl\")");
+        assert_eq!(
+                ScadElement::Polygon(PolygonParameters::new(vec!(na::Vector2::new(1., 1.)))).get_code(),
+                "polygon(points=[[1,1],],paths=undef,convexity=10)"
+            );
 
         assert_eq!(ScadElement::Color(na::zero()).get_code(), "color([0,0,0])");
         assert_eq!(ScadElement::NamedColor("aqua".to_string()).get_code(), "color(\"aqua\")");
@@ -323,19 +328,4 @@ mod scad_tests
             );
     }
 
-    #[test]
-    fn polygon_test()
-    {
-        assert_eq!(
-            ScadElement::Polygon(
-                vec!(
-                    na::Vector2::<f32>::new(0., 0.), 
-                    na::Vector2::<f32>::new(0., 1.),
-                    na::Vector2::<f32>::new(1., 0.)
-                ), 
-                vec!(
-                    vec!(0, 1), vec!(1,2), vec!(2,0)
-                )
-            ).get_code() , "polygon(points=[[0,0],[0,1],[1,0],],paths=[[0,1,],[1,2,],[2,0,],],convexity=10)");
-    }
 }
