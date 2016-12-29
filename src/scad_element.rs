@@ -37,7 +37,7 @@ impl Default for LinExtrudeParams
         LinExtrudeParams
         {
             height: 1.,
-            center: true,
+            center: false,
             convexity: 10,
             twist: 0.,
             slices: 1,
