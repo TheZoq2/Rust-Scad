@@ -351,9 +351,9 @@ mod scad_tests
     #[test]
     fn lin_extrude_test()
     {
-        assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=true,convecity=10,twist=0,slices=1");
+        assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=false,convecity=10,twist=0,slices=1");
 
-        assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=true,convecity=10,twist=720,slices=1");
+        assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=false,convecity=10,twist=720,slices=1");
     }
 
     #[test]

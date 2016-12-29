@@ -113,6 +113,17 @@ impl ScadObject
     {
         self.important = true;
     }
+
+    /**
+      Takes ownership over the object, marks it as important and returns it.
+      Usefull if you want to mark something as important without having to
+      change the binding to mut
+    */
+    pub fn important(mut self) -> ScadObject
+    {
+        self.important = true;
+        self
+    }
 }
 
 #[cfg(test)]
@@ -134,5 +145,8 @@ mod statement_tests
 
         test_stmt.is_important();
         assert_eq!(test_stmt.get_code(), "!translate([0,0,0])\n{\n\tcube([1,1,1]);\n}");
+
+        let test_2 = ScadObject::new(ScadElement::Union).important();
+        assert_eq!(test_2.get_code(), "!union();");
     }
 }
