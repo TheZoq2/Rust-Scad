@@ -179,6 +179,7 @@ pub enum ScadElement {
 
     //2D stuff
     Square(na::Vector2<f32>),
+    Circle(CircleType),
     Polygon(PolygonParameters),
     Offset(OffsetType, bool),
 
@@ -262,6 +263,15 @@ impl ScadElement
             ScadElement::Square(value) => {
                 String::from("square(") + &value.get_code() + ")"
             },
+            ScadElement::Circle(circle_type) => {
+                let size = match circle_type
+                {
+                    CircleType::Radius(val) => String::from("r=") + &val.get_code(),
+                    CircleType::Diameter(val) => String::from("d=") + &val.get_code(),
+                };
+
+                String::from("circle(") + &size + ")"
+            }
 
             ScadElement::Polygon(parameters) => {
                 String::from("polygon(") + &parameters.get_code() + ")"
@@ -381,5 +391,8 @@ mod scad_tests
         assert_eq!(
             ScadElement::Scale2d(na::Vector2::new(1., 1.)).get_code()
             , "scale([1,1])");
+
+        assert_eq!(ScadElement::Circle(CircleType::Radius(10.)).get_code(), "circle(r=10)");
+        assert_eq!(ScadElement::Circle(CircleType::Diameter(10.)).get_code(), "circle(d=10)");
     }
 }
