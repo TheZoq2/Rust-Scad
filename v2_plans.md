@@ -15,6 +15,8 @@ parameters to implement behaviour not present in scad itself. For example,
 a cube can only be centered on all axis at the same time in scad, but
 a nice feature to have would be to allow centering on only one or two axis.
 
+Possibly use the type system more. Separate 2d/3d?
+
 #Implementation
 The best idea is probably to replace the scad_element enum with a struct. 
 
