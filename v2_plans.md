@@ -17,8 +17,19 @@ a nice feature to have would be to allow centering on only one or two axis.
 
 Possibly use the type system more. Separate 2d/3d?
 
+New macro for setting non-default parameters. Perhaps something with the syntax
+```rust
+scad!(Object(vec3(yolo), swag=yolo...))
+```
+
+Avoid using ; in macros where it doesn't make sense 
+```rust
+scad!(Translate(..);yolo)
+                   ^
+```
+
 #Implementation
 The best idea is probably to replace the scad_element enum with a struct. 
 
 Backwards compatibility can be achieved using the macro, however, it might be 
-tricky to do that while allowing 
+tricky to do that while allowing optional parameters

@@ -2,6 +2,7 @@ extern crate nalgebra as na;
 
 use scad_macros::*;
 use scad_element::ScadElement::*;
+use scad_element::CircleType;
 use scad_object::*;
 
 
@@ -38,6 +39,18 @@ pub fn centered_square(size: na::Vector2<f32>, centering: (bool, bool)) -> ScadO
     translation
 }
 
+/**
+  Creates a cylinder that is centered along all axis
+*/
+pub fn centered_cylinder(height: f32, size: CircleType) -> ScadObject
+{
+    let mut translation = ScadObject::new(Translate(vec3(0., 0., -height / 2.)));
+    let cylinder = ScadObject::new(Cylinder(height, size));
+
+    translation.add_child(cylinder);
+    translation
+}
+
 
 
 #[cfg(test)]
@@ -68,5 +81,13 @@ mod tests
         let obj = centered_square(vec2(2., 4.), (true, true));
 
         assert_eq!(obj.get_code(), "translate([-1,-2])\n{\n\tsquare([2,4]);\n}");
+    }
+
+    #[test]
+    fn cylinder_center()
+    {
+        let obj = centered_cylinder(10., CircleType::Radius(5.));
+
+        assert_eq!(obj.get_code(), "translate([0,0,-5])\n{\n\tcylinder(h=10,r=5);\n}");
     }
 }
