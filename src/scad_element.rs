@@ -54,6 +54,39 @@ impl ScadType for LinExtrudeParams
             ",slices=" + &self.slices.get_code()
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+///Parameters for the rotate extrude function
+#[derive(Clone)]
+pub struct RotateExtrudeParams
+{
+    pub angle: f32,
+    pub convexity: usize,
+}
+
+impl Default for RotateExtrudeParams
+{
+    fn default() -> RotateExtrudeParams
+    {
+        RotateExtrudeParams
+        {
+            angle: 360.,
+            convexity: 10
+        }
+    }
+}
+
+impl ScadType for RotateExtrudeParams
+{
+    fn get_code(&self) -> String
+    {
+        String::from("angle=") 
+            + &self.angle.get_code() 
+            + ",convexity="
+            + &self.convexity.get_code()
+    }
+}
 /////////////////////////////////////////////////////////////////////////////
 /**
   Parameters for the polygon function.
@@ -162,6 +195,7 @@ pub enum ScadElement {
     Rotate(f32, na::Vector3<f32>),
     Mirror(na::Vector3<f32>),
     LinearExtrude(LinExtrudeParams),
+    RotateExtrude(RotateExtrudeParams),
 
     Difference,
     Union,
@@ -213,6 +247,9 @@ impl ScadElement
             },
             ScadElement::LinearExtrude(params) => {
                 String::from("linear_extrude(") + &params.get_code() + ")"
+            },
+            ScadElement::RotateExtrude(params) => {
+                String::from("rotate_extrude(") + &params.get_code() + ")"
             }
 
             //Primitive objects
@@ -364,6 +401,14 @@ mod scad_tests
         assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=false,convecity=10,twist=0,slices=1");
 
         assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=false,convecity=10,twist=720,slices=1");
+    }
+
+    #[test]
+    fn rotate_extrude_test()
+    {
+        let obj = ScadElement::RotateExtrude(Default::default());
+
+        assert_eq!(obj.get_code(), "rotate_extrude(angle=360,convexity=10)");
     }
 
     #[test]
