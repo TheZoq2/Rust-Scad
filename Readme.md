@@ -37,7 +37,7 @@ as you would expect in most programming languages.
 My library works around this issue by using rust to do all logic and generate simple 
 scad code which accomplishes the same thing as more complex scad code would. 
 
-##Usage
+## Usage
 
 Add the following to your cargo.toml.
 ```
@@ -54,11 +54,11 @@ use scad_generator::*;
 
 See the documentation for a tutorial.
 
-##Documentation
+## Documentation
 The documentation  can be found at http://thezoq2.github.io/Rust-Scad/doc/scad_generator/index.html
 
 
-##Utility repo
+## Utility repo
 Since including dependencies in rust projects using cargo is so simple, I have a repository
 with some standard objects like nuts, screws and some RC things like servos in a separate
 repo which you can also include using cargo. For now it's undocumented but I will get 
