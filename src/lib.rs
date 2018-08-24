@@ -16,7 +16,7 @@
     pub fn main() {
         //Create an scad file object for storing the scad objects. This
         //allows us to set things like the detail level ($fn) for the models.
-        let mut scadfile = ScadFile::new();
+        let mut scad_file = ScadFile::new();
 
         //Sets the $fn variable in scad which controls the detail level of things
         //like spheres. Look at the scad wiki for details

@@ -130,7 +130,7 @@ macro_rules! qstruct
     =>
     {
         //Create the struct itself
-        struct $name
+        pub struct $name
         {
             $(
                 pub $mem_name : $mem_type
