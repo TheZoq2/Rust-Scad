@@ -46,7 +46,7 @@ cargo for adding libraries with common objects.
 Add the crate to your cargo.toml
 ```
 [dependencies]
-scad = "1.0.0"
+scad = "1.0.1"
 ```
 
 Then read the documentation for a quick introduction to the library
