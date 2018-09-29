@@ -42,14 +42,14 @@ scad code which accomplishes the same thing as more complex scad code would.
 Add the following to your cargo.toml.
 ```
 [dependencies]
-scad_generator = {git = "https://github.com/TheZoq2/Rust-Scad.git"}
+scad = 1.0
 ```
 
 And import the crate.
 ```Rust
 #[macro_use]
-extern crate scad_generator;
-use scad_generator::*;
+extern crate scad;
+use scad::*;
 ```
 
 See the documentation for a tutorial.

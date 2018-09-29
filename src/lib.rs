@@ -8,10 +8,10 @@
     ```
     //"Import" the module along with the macros
     #[macro_use]
-    extern crate scad_generator;
+    extern crate scad;
 
-    //Avoid having to write scad_generator:: everywhere
-    use scad_generator::*;
+    //Avoid having to write scad:: everywhere
+    use scad::*;
 
     pub fn main() {
         //Create an scad file object for storing the scad objects. This
@@ -62,8 +62,8 @@
 
     ```
     # #[macro_use]
-    # extern crate scad_generator;
-    # use scad_generator::*;
+    # extern crate scad;
+    # use scad::*;
 
     # fn main(){
         scad!(Cube(vec3(10., 10., 10.)));
@@ -77,8 +77,8 @@
 
     ```
     # #[macro_use]
-    # extern crate scad_generator;
-    # use scad_generator::*;
+    # extern crate scad;
+    # use scad::*;
 
     # fn main() {
         let child = scad!(Cylinder(10., Radius(3.)));
@@ -125,8 +125,8 @@
 
     ```
     # #[macro_use]
-    # extern crate scad_generator;
-    # use scad_generator::*;
+    # extern crate scad;
+    # use scad::*;
 
     # fn main() {
         //Create the parent and make sure its mutable
