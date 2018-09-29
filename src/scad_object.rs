@@ -21,7 +21,7 @@ use std::vec::*;
     following.
 
     ```
-    # use scad_generator::*;
+    # use scad::*;
     //Create the parent
     let mut obj = ScadObject::new(ScadElement::Union);
 

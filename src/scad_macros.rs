@@ -5,10 +5,7 @@ extern crate nalgebra as na;
 
     #Examples
     ```
-    # #[macro_use]
-    # extern crate scad_generator;
-
-    # use scad_generator::*;
+    # use scad::*;
 
     # fn main(){
          //No children
@@ -92,8 +89,7 @@ pub fn vec2(x: f32, y: f32) -> na::Vector2<f32>
 
     ```
     # #[macro_use]
-    # extern crate scad_generator;
-    # use scad_generator::*;
+    # use scad::*;
 
     qstruct!(Demo(inner_width: f32)
     {

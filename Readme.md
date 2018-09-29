@@ -37,9 +37,13 @@ as you would expect in most programming languages.
 My library works around this issue by using rust to do all logic and generate simple 
 scad code which accomplishes the same thing as more complex scad code would. 
 
+Using rust rather than the scad language also comes with other advantages such
+as being able to store scad objects in variables, static types and being able to use
+cargo for adding libraries with common objects.
+
 ## Usage
 
-Add the following to your cargo.toml.
+Add the crate to your cargo.toml
 ```
 [dependencies]
 scad = 1.0
@@ -52,7 +56,7 @@ extern crate scad;
 use scad::*;
 ```
 
-See the documentation for a tutorial.
+Then read the documentation for a quick introduction to the library
 
 ## Documentation
 The documentation  can be found at http://thezoq2.github.io/Rust-Scad/doc/scad_generator/index.html
