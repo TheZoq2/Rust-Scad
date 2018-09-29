@@ -59,7 +59,7 @@ use scad::*;
 Then read the documentation for a quick introduction to the library
 
 ## Documentation
-The documentation  can be found at http://thezoq2.github.io/Rust-Scad/doc/scad_generator/index.html
+The documentation  can be found at docs.rs/scad
 
 
 ## Utility repo
