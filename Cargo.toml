@@ -10,4 +10,4 @@ license = "LGPL-2.0-or-later"
 readme = "Readme.md"
 
 [dependencies]
-nalgebra="0.13"
+nalgebra= "0.16.8"
