@@ -1,6 +1,6 @@
 [package]
 name = "scad"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["TheZoq2 <frans.skarman@gmail.com>"]
 
 description = "A crate for generating OpenSCAD models using rust"
