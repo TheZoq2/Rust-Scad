@@ -201,6 +201,7 @@ pub enum ScadElement {
     Union,
     Hull,
     Intersection,
+    Minkowski,
 
     //Object stuff
     Cube(na::Vector3<f32>),
@@ -348,6 +349,7 @@ impl ScadElement
             ScadElement::Difference => String::from("difference()"),
             ScadElement::Union => String::from("union()"),
             ScadElement::Hull => String::from("hull()"),
+            ScadElement::Minkowski => String::from("minkowski()"),
             ScadElement::Intersection => String::from("intersection()"),
         }
     }
@@ -367,16 +369,6 @@ mod scad_tests
     #[test]
     fn simple_enum_test()
     {
-        assert_eq!(ScadElement::Translate(na::Vector3::new(0.5,0.5,0.5)).get_code(), "translate([0.5,0.5,0.5])");
-
-        assert_eq!(ScadElement::Rotate(90.0, na::Vector3::new(1.0, 0.0, 0.0)).get_code(), "rotate(90,[1,0,0])");
-
-        assert_eq!(ScadElement::Cylinder(5.0, CircleType::Radius(7.0)).get_code(), "cylinder(h=5,r=7)");
-        assert_eq!(ScadElement::Cylinder(5.0, CircleType::Diameter(7.0)).get_code(), "cylinder(h=5,d=7)");
-
-        assert_eq!(ScadElement::Square(na::Vector2::new(1.,2.)).get_code(), "square([1,2])");
-
-        assert_eq!(ScadElement::Sphere(CircleType::Radius(7.)).get_code(), "sphere(r=7)");
         assert_eq!(ScadElement::Sphere(CircleType::Diameter(7.)).get_code(), "sphere(d=7)");
 
         assert_eq!(ScadElement::Cone(5., CircleType::Radius(7.), CircleType::Radius(14.)).get_code(), "cylinder(h=5,r1=7,r2=14)");
@@ -393,6 +385,9 @@ mod scad_tests
 
         assert_eq!(ScadElement::Offset(OffsetType::Delta(5.), false).get_code()
                    , "offset(delta=5,chamfer=false)");
+
+        assert_eq!(ScadElement::Minkowski.get_code()
+                   , "minkowski()");
     }
 
     #[test]
