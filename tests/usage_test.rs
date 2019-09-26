@@ -1,7 +1,7 @@
 #[macro_use]
-extern crate scad_generator;
+extern crate scad;
 
-use scad_generator::*;
+use scad::*;
 
 
 #[test]

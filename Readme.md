@@ -46,13 +46,20 @@ cargo for adding libraries with common objects.
 Add the crate to your cargo.toml
 ```
 [dependencies]
-scad = "1.0.1"
+scad = 1.0
+```
+
+And import the crate.
+```Rust
+#[macro_use]
+extern crate scad;
+use scad::*;
 ```
 
 Then read the documentation for a quick introduction to the library
 
 ## Documentation
-The documentation  can be found at http://thezoq2.github.io/Rust-Scad/doc/scad_generator/index.html
+The documentation  can be found at docs.rs/scad
 
 
 ## Utility repo
