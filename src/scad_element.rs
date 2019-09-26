@@ -217,6 +217,7 @@ pub enum ScadElement {
     Circle(CircleType),
     Polygon(PolygonParameters),
     Offset(OffsetType, bool),
+    Cut,
 
     Rotate2d(f32),
     Translate2d(na::Vector2<f32>),
@@ -331,6 +332,7 @@ impl ScadElement
             ScadElement::Scale2d(scale) => {
                 String::from("scale(") + &scale.get_code() + ")"
             }
+            ScadElement::Cut => String::from("cut()"),
 
             //Colors
             ScadElement::Color(value) => {
@@ -386,8 +388,8 @@ mod scad_tests
         assert_eq!(ScadElement::Offset(OffsetType::Delta(5.), false).get_code()
                    , "offset(delta=5,chamfer=false)");
 
-        assert_eq!(ScadElement::Minkowski.get_code()
-                   , "minkowski()");
+        assert_eq!(ScadElement::Minkowski.get_code() , "minkowski()");
+        assert_eq!(ScadElement::Cut.get_code() , "cut()");
     }
 
     #[test]
