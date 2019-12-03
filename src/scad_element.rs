@@ -50,7 +50,7 @@ impl ScadType for LinExtrudeParams
     fn get_code(&self) -> String 
     {
         String::from("height=") + &self.height.get_code() + ",center=" + &self.center.get_code() +
-            ",convecity=" + &self.convexity.get_code() + ",twist=" + &self.twist.get_code() + 
+            ",convexity=" + &self.convexity.get_code() + ",twist=" + &self.twist.get_code() +
             ",slices=" + &self.slices.get_code()
     }
 }
@@ -395,9 +395,9 @@ mod scad_tests
     #[test]
     fn lin_extrude_test()
     {
-        assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=false,convecity=10,twist=0,slices=1");
+        assert_eq!(LinExtrudeParams::default().get_code(), "height=1,center=false,convexity=10,twist=0,slices=1");
 
-        assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=false,convecity=10,twist=720,slices=1");
+        assert_eq!(LinExtrudeParams{twist:720., .. Default::default()}.get_code(), "height=1,center=false,convexity=10,twist=720,slices=1");
     }
 
     #[test]
