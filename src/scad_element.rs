@@ -2,6 +2,7 @@ use std::string::*;
 use scad_type::*;
 extern crate nalgebra as na;
 
+use std::rc::Rc;
 use std::vec::Vec;
 
 
@@ -225,6 +226,35 @@ pub enum ScadElement {
 
     Color(na::Vector3<f32>),
     NamedColor(String),
+
+    /// Call to user defined / included scad function.
+    FunctionCall(String, Option<Rc<FnCallArgs>>, Option<Rc<FnCallNamedArgs>>),
+}
+
+/// Direct function call arguments - vector of values.
+pub type FnCallArgs = Vec<Box<dyn ScadType>>;
+
+/// Named arguments - vector of tuples - name, argument value
+pub type FnCallNamedArgs = Vec<(String, Box<dyn ScadType>)>;
+
+/// OpenSCAD Function call arguments, "arg_value, ..." comma separated printout.
+impl ScadType for FnCallArgs {
+    fn get_code(&self) -> String {
+        let arg_strs: Vec<String> = self.iter().map(|arg| arg.as_ref().get_code()).collect();
+        arg_strs.join(", ")
+    }
+}
+
+/// OpenSCAD Function call named arguments, "arg_name = arg_value", ... comma separated printout.
+impl ScadType for FnCallNamedArgs {
+    fn get_code(&self) -> String {
+        let named_strs: Vec<String> = self.iter().map(|arg| {
+            let arg_name = &arg.0;
+            let arg_value = arg.1.as_ref();
+            format!("{} = {}", arg_name, arg_value.get_code())
+        }).collect();
+        named_strs.join(", ")
+    }
 }
 
 impl ScadElement
@@ -353,6 +383,24 @@ impl ScadElement
             ScadElement::Hull => String::from("hull()"),
             ScadElement::Minkowski => String::from("minkowski()"),
             ScadElement::Intersection => String::from("intersection()"),
+
+            ScadElement::FunctionCall(fn_name, fn_args, fn_named_args) => {
+                let mut all_args_str = String::new();
+                // direct arguments (if any) come first
+                if let Some(ref args) = fn_args {
+                    all_args_str += &args.get_code();
+                }
+                // followed by named arguments (if any)
+                if let Some(ref named_args) = fn_named_args {
+                    let named_str = named_args.get_code();
+                    // add separator comma if both direct and named args are present
+                    if !all_args_str.is_empty() && !named_str.is_empty() {
+                        all_args_str += ", ";
+                    }
+                    all_args_str += &named_str;
+                }
+                format!("{}({})", fn_name, all_args_str)
+            }
         }
     }
 }

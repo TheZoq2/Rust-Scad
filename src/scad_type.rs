@@ -24,6 +24,14 @@ impl ScadType for na::Vector2<f32>
     }
 }
 
+impl ScadType for na::Vector1<f32>
+{
+    fn get_code(&self) -> String
+    {
+        String::from("[") + &self.x.get_code() + "]"
+    }
+}
+
 impl ScadType for f32
 {
     fn get_code(&self) -> String 
