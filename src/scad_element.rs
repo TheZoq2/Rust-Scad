@@ -124,7 +124,7 @@ impl PolygonParameters
     pub fn new(points: Vec<na::Vector2<f32>>) -> PolygonParameters
     {
         PolygonParameters {
-            points: points,
+            points,
             path: PolygonPathType::Default,
             convexity: 10
         }

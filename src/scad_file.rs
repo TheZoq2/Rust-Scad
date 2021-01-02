@@ -90,19 +90,20 @@ impl ScadFile
             Ok(file) => file,
         };
 
-        match file.write(self.get_code().as_bytes()) {
-            Err(_) => 
-                {
-                    println!("Failed to write to output file");
-                    return false;
-                },
-            Ok(_) => {}
+        if file.write(self.get_code().as_bytes()).is_err() {
+            println!("Failed to write to output file");
+            return false;
         };
 
-        return true;
+        true
     }
 }
 
+impl Default for ScadFile {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 
 #[cfg(test)]

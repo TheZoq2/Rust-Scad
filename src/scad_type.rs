@@ -71,7 +71,7 @@ impl<T: ScadType> ScadType for Vec<T>
             result = result + &elem.get_code() + ",";
         }
         
-        result = result + "]";
+        result += "]";
 
         result
     }

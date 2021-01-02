@@ -51,7 +51,7 @@ impl ScadObject
     pub fn new(element: ScadElement) -> ScadObject 
     {
         ScadObject {
-            element: element,
+            element,
 
             children: Vec::new(),
 
@@ -94,7 +94,7 @@ impl ScadObject
                     {
                         //Add the children indented one line
                         child_code = child_code + "\t" + &(stmt.get_code().replace("\n", "\n\t"));
-                        child_code = child_code + "\n";
+                        child_code += "\n";
                     }
 
                     //Add the final bracket and 'return' the result
@@ -102,7 +102,7 @@ impl ScadObject
                 }
         });
 
-        return result;
+        result
     }
 
     /**
