@@ -192,6 +192,7 @@ pub enum ScadElement {
     //Transformation stuff
     Translate(na::Vector3<f32>),
     Scale(na::Vector3<f32>),
+    Resize(na::Vector3<f32>, bool),
     Rotate(f32, na::Vector3<f32>),
     Mirror(na::Vector3<f32>),
     LinearExtrude(LinExtrudeParams),
@@ -240,6 +241,9 @@ impl ScadElement
             },
             ScadElement::Scale(value) => {
                 String::from("scale(") + &value.get_code() + ")"
+            },
+            ScadElement::Resize(vector, auto) => {
+                String::from("resize(") + &vector.get_code() + ", auto = " + &auto.get_code() + ")"
             },
             ScadElement::Rotate(angle, vector) => {
                 String::from("rotate(") + &angle.get_code() + "," + &vector.get_code() + ")"
