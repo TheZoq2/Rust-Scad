@@ -6,10 +6,6 @@
     First, let's look at a simple example of the crate being used.
 
     ```
-    //"Import" the module along with the macros
-    #[macro_use]
-    extern crate scad;
-
     //Avoid having to write scad:: everywhere
     use scad::*;
 
@@ -39,6 +35,9 @@
         //Save the scad code to a file
         scad_file.write_to_file(String::from("out.scad"));
 
+        # // remove the created file
+        # drop(std::fs::remove_file("out.scad"));
+
         //You can also print the code for the object manually since it's just a string
         println!("{}", scad!(Cube(vec3(5., 3.,  2.))).get_code());
     }
@@ -55,19 +54,17 @@
 
     ## The `scad!` macro
     The most important part of the crate is the `scad!` macro. The first parameter
-    of the macro is the element type of the object we want to create which should be 
+    of the macro is the element type of the object we want to create which should be
     an instance of the `ScadElement` enum. If you only want to create a single scad
     object, you can simply end the macro invocation after the parent like this:
 
 
     ```
-    # #[macro_use]
-    # extern crate scad;
-    # use scad::*;
+    use scad::*;
 
-    # fn main(){
-        scad!(Cube(vec3(10., 10., 10.)));
-    # }
+    fn main(){
+      scad!(Cube(vec3(10., 10., 10.)));
+    }
     ```
 
     A lot of times, you want to add more elements as children to an scad object. For example
@@ -76,11 +73,9 @@
     of the `ScadObject`. The children should be separated by `;`.
 
     ```
-    # #[macro_use]
-    # extern crate scad;
-    # use scad::*;
+    use scad::*;
 
-    # fn main() {
+    fn main() {
         let child = scad!(Cylinder(10., Radius(3.)));
 
         scad!(Difference;{
@@ -92,67 +87,64 @@
             get_child(),
         });
 
-        fn get_child() -> ScadObject
-        {
-        //...
-        # scad!(Union)
+        fn get_child() -> ScadObject {
+            //...
+            scad!(Union)
         }
-    # }
+    }
     ```
 
     ## Object parameters
-    Almost all `ScadElements` take additional parameters that describe them. They 
+    Almost all `ScadElements` take additional parameters that describe them. They
     are enum parameters so you specify them as you would with enums. Some parameters
-    are regular built in types like `f32` but there are some special ones which are 
+    are regular built in types like `f32` but there are some special ones which are
     described below.
 
     ### Vectors
     The most common parameter is a vector. This library uses the nalgebra crate for vectors
-    but writing `na::Vector3::new(x, y, z)` each time you want a vector is tedious which is 
+    but writing `na::Vector3::new(x, y, z)` each time you want a vector is tedious which is
     why the library contains the functions `vec3(x, y, z)` and `vec2(x, y)`. They are simply
     functions that call the equivalent nalgebra constructor.
 
     ### Circle radii and diameters.
     Just like regular OpenSCAD, you can create round objects by either specifying the diameter
-    or radius of the circle. This is done using the `CircleType` enum which is either 
+    or radius of the circle. This is done using the `CircleType` enum which is either
     `Diameter(d)` or `Radius(r)`.
 
     ## Creating objects in loops
     In most cases, the `scad!` macro should be good enoough to create objects, but one
-    case where it is not,  is when you want to create several objects in a loop and 
-    add them as children to a specific object. In this case, you have to use the 
+    case where it is not,  is when you want to create several objects in a loop and
+    add them as children to a specific object. In this case, you have to use the
     `add_child` method of the `ScadObject`  struct manually
 
     ```
-    # #[macro_use]
-    # extern crate scad;
-    # use scad::*;
+    use scad::*;
 
-    # fn main() {
+    fn main() {
         //Create the parent and make sure its mutable
         let mut parent = scad!(Union);
 
         for i in 0..3 {
             parent.add_child(scad!(Cube(vec3(0., i as f32, 0.))));
         }
-    # }
+    }
     ```
 */
 
-mod scad_element;
-mod scad_object;
-mod scad_file;
-mod scad_type;
 pub mod common_objects;
+mod scad_element;
+mod scad_file;
+mod scad_object;
+mod scad_type;
 
 #[macro_use]
 pub mod scad_macros;
 
-pub use scad_element::*;
-pub use scad_object::*;
-pub use scad_element::ScadElement::*;
 pub use scad_element::CircleType::*;
+pub use scad_element::ScadElement::*;
+pub use scad_element::*;
 pub use scad_macros::*;
+pub use scad_object::*;
 
 pub use scad_file::*;
 pub use scad_type::*;

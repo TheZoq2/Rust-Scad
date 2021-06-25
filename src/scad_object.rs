@@ -1,4 +1,5 @@
-use scad_element::*;
+use crate::scad_element::*;
+use crate::scad_type::ScadType;
 
 use std::vec::*;
 
@@ -17,7 +18,7 @@ use std::vec::*;
     }
     ```
 
-    Without using the `scad!` macro, you would create an scad object by doing the 
+    Without using the `scad!` macro, you would create an scad object by doing the
     following.
 
     ```
@@ -32,12 +33,11 @@ use std::vec::*;
 
     This would be quite tedious to type each time you want to create a new object
     which is why the `scad!` macro exists. This does mean that if you want to add
-    more children to an scad object created by the macro, you can simply use the 
-    `add_child` function on the result of the macro. 
+    more children to an scad object created by the macro, you can simply use the
+    `add_child` function on the result of the macro.
 */
 #[derive(Clone)]
-pub struct ScadObject 
-{
+pub struct ScadObject {
     element: ScadElement,
 
     children: Vec<ScadObject>,
@@ -46,10 +46,8 @@ pub struct ScadObject
     important: bool,
 }
 
-impl ScadObject 
-{
-    pub fn new(element: ScadElement) -> ScadObject 
-    {
+impl ScadObject {
+    pub fn new(element: ScadElement) -> ScadObject {
         ScadObject {
             element,
 
@@ -59,58 +57,15 @@ impl ScadObject
         }
     }
 
-    pub fn add_child(&mut self, statement: ScadObject) 
-    {
+    pub fn add_child(&mut self, statement: ScadObject) {
         self.children.push(statement);
-    }
-
-    /**
-      Returns the scad code for the object. 
-
-      If there are no children, only the code for the ScadElement of the 
-      object followed by a `;` is returned. If children exist, the code for 
-      the element is returned first, followed by the code for each child surrounded
-      by `{}` and indented 1 tab character.
-    */
-    pub fn get_code(&self) -> String 
-    {
-        let mut result: String;
-
-        //Get the code for the current element
-        result = self.element.clone().get_code();
-
-        if self.important
-        {
-            result = String::from("!") + &result;
-        }
-
-        //Adding the code for all children, or ; if none exist
-        result = result + &(match self.children.len()
-        {
-            0 => String::from(";"),
-            _ => {
-                    let mut child_code = String::from("\n{\n");
-                    for stmt in &self.children 
-                    {
-                        //Add the children indented one line
-                        child_code = child_code + "\t" + &(stmt.get_code().replace("\n", "\n\t"));
-                        child_code += "\n";
-                    }
-
-                    //Add the final bracket and 'return' the result
-                    child_code + "}"
-                }
-        });
-
-        result
     }
 
     /**
       Marks the object as important. This will prepend the object code
       with an ! which tells scad to only render that object and its children.
     */
-    pub fn is_important(&mut self)
-    {
+    pub fn is_important(&mut self) {
         self.important = true;
     }
 
@@ -119,32 +74,77 @@ impl ScadObject
       Usefull if you want to mark something as important without having to
       change the binding to mut
     */
-    pub fn important(mut self) -> ScadObject
-    {
+    pub fn important(mut self) -> ScadObject {
         self.important = true;
         self
     }
 }
 
+impl ScadType for ScadObject {
+    /**
+      Returns the scad code for the object.
+
+      If there are no children, only the code for the ScadElement of the
+      object followed by a `;` is returned. If children exist, the code for
+      the element is returned first, followed by the code for each child surrounded
+      by `{}` and indented 1 tab character.
+    */
+    fn get_code(&self) -> String {
+        let mut result: String;
+
+        //Get the code for the current element
+        result = self.element.clone().get_code();
+
+        if self.important {
+            result = String::from("!") + &result;
+        }
+
+        //Adding the code for all children, or ; if none exist
+        result = result
+            + &(match self.children.len() {
+                0 => String::from(";"),
+                _ => {
+                    let mut child_code = String::from("\n{\n");
+                    for stmt in &self.children {
+                        //Add the children indented one line
+                        child_code = child_code + "\t" + &(stmt.get_code().replace("\n", "\n\t"));
+                        child_code += "\n";
+                    }
+
+                    //Add the final bracket and 'return' the result
+                    child_code + "}"
+                }
+            });
+
+        result
+    }
+}
+
 #[cfg(test)]
-mod statement_tests
-{
-    extern crate nalgebra as na;
-    use scad_object::*;
-    use scad_element::*;
+mod statement_tests {
+    use super::*;
+    use nalgebra as na;
 
     #[test]
-    fn simple_stmt_test()
-    {
-        let mut test_stmt = ScadObject::new(ScadElement::Translate(na::Vector3::new(0.0, 0.0, 0.0)));
+    fn simple_stmt_test() {
+        let mut test_stmt =
+            ScadObject::new(ScadElement::Translate(na::Vector3::new(0.0, 0.0, 0.0)));
 
         assert_eq!(test_stmt.get_code(), "translate([0,0,0]);");
 
-        test_stmt.add_child(ScadObject::new(ScadElement::Cube(na::Vector3::new(1.0, 1.0, 1.0))));
-        assert_eq!(test_stmt.get_code(), "translate([0,0,0])\n{\n\tcube([1,1,1]);\n}");
+        test_stmt.add_child(ScadObject::new(ScadElement::Cube(na::Vector3::new(
+            1.0, 1.0, 1.0,
+        ))));
+        assert_eq!(
+            test_stmt.get_code(),
+            "translate([0,0,0])\n{\n\tcube([1,1,1]);\n}"
+        );
 
         test_stmt.is_important();
-        assert_eq!(test_stmt.get_code(), "!translate([0,0,0])\n{\n\tcube([1,1,1]);\n}");
+        assert_eq!(
+            test_stmt.get_code(),
+            "!translate([0,0,0])\n{\n\tcube([1,1,1]);\n}"
+        );
 
         let test_2 = ScadObject::new(ScadElement::Union).important();
         assert_eq!(test_2.get_code(), "!union();");
