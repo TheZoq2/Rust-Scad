@@ -6,7 +6,7 @@ use std::vec::*;
 /**
   An scad object which is a single scad element and can have zero or more child objects
 
-  #How it works
+  ## How it works
   An scad object is a single `ScadElement` optionally followed by any number of child
   objects. This represents the following scad code:
 
