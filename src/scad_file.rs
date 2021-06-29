@@ -7,8 +7,8 @@ use std::string::String;
 use std::vec::Vec;
 
 /**
-    Object that stores scad objects along with global parameters for
-    the objects. Also has methods for writing the  data to files.
+  Object that stores scad objects along with global parameters for
+  the objects. Also has methods for writing the  data to files.
 */
 pub struct ScadFile {
     objects: Vec<ScadObject>,
@@ -26,8 +26,8 @@ impl ScadFile {
     }
 
     /**
-        Returns the code for the global parameters as well as all the
-        children in the file
+      Returns the code for the global parameters as well as all the
+      children in the file
     */
     pub fn get_code(&self) -> String {
         let mut result = String::from("");
@@ -48,24 +48,24 @@ impl ScadFile {
     }
 
     /**
-     Sets the $fn variable for the whole file. This varibale defines  the detail
-     amount for cylindrical objects
+      Sets the $fn variable for the whole file. This varibale defines  the detail
+      amount for cylindrical objects
     */
     pub fn set_detail(&mut self, detail: i32) {
         self.detail = detail;
     }
 
     /**
-     Writes the resulting code to a file
+      Writes the resulting code to a file
 
-     ##Arguments
+      ## Arguments
 
-       path: The path to the file where we want to write relative to the current
-       working directory.
+      * `path`: The path to the file where we want to write relative to the current
+        working directory.
 
-     ##Returns
-     The function will return false and print a message to the console if
-     writing fails.
+      ## Returns
+      The function will return false and print a message to the console if
+      writing fails.
     */
     pub fn write_to_file(&self, path: String) -> bool {
         //Writing the result to file

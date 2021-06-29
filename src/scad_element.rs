@@ -4,8 +4,8 @@ use std::vec::Vec;
 
 use crate::scad_type::*;
 
-///Since scad allows creation of circle like objects using either radius or diameter,
-///this enum specifies which format to use
+/// Since scad allows creation of circle like objects using either radius or diameter,
+/// this enum specifies which format to use
 #[derive(Clone)]
 pub enum CircleType {
     Radius(f32),
@@ -14,10 +14,10 @@ pub enum CircleType {
 
 /////////////////////////////////////////////////////////////////////////////
 
-///Parameters for the linear extrude function.
+/// Parameters for the linear extrude function.
 ///
-///These are in a struct because  there are so many of them and
-///most of them  can have a default value.
+/// These are in a struct because  there are so many of them and
+/// most of them  can have a default value.
 #[derive(Clone)]
 pub struct LinExtrudeParams {
     pub height: f32,
@@ -56,7 +56,7 @@ impl ScadType for LinExtrudeParams {
 
 /////////////////////////////////////////////////////////////////////////////
 
-///Parameters for the rotate extrude function
+/// Parameters for the rotate extrude function
 #[derive(Clone)]
 pub struct RotateExtrudeParams {
     pub angle: f32,
@@ -79,7 +79,7 @@ impl ScadType for RotateExtrudeParams {
 }
 /////////////////////////////////////////////////////////////////////////////
 /**
- Parameters for the polygon function.
+  Parameters for the polygon function.
 */
 #[derive(Clone)]
 enum PolygonPathType {
@@ -156,11 +156,11 @@ impl ScadType for OffsetType {
 }
 /////////////////////////////////////////////////////////////////////////////
 
-///Different kinds of scad modules and function. These are parameters
-///for `ScadObjects`.
+/// Different kinds of scad modules and function. These are parameters
+/// for `ScadObjects`.
 ///
-///Most of these have  the same name as the openscad counterparts so see
-///their documentation for details
+/// Most of these have  the same name as the openscad counterparts so see
+/// their documentation for details
 #[derive(Clone)]
 pub enum ScadElement {
     //Transformation stuff
@@ -203,7 +203,7 @@ pub enum ScadElement {
 }
 
 impl ScadElement {
-    ///Returns scad code for each of the elements
+    /// Returns scad code for each of the elements
     pub fn get_code(self) -> String {
         match self {
             //Transformation things

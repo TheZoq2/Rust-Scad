@@ -1,24 +1,21 @@
 use nalgebra as na;
 
 /**
-    Creates an scad object with optional children
+  Creates an scad object with optional children
 
-    #Examples
-    ```
-    # use scad::*;
+  ### Examples
+  ```
+  # use scad::*;
+  //No children
+  let cube = scad!(Cube(vec3(1., 1., 1.)));
 
-    # fn main(){
-         //No children
-         let cube = scad!(Cube(vec3(1., 1., 1.)));
-
-         //One parent with several children
-         scad!(Difference;
-         {
-             cube,
-             scad!(Cube(vec3(2., 1., 1.))),
-         });
-     # }
-    ```
+  //One parent with several children
+  scad!(Difference;
+  {
+      cube,
+      scad!(Cube(vec3(2., 1., 1.))),
+  });
+  ```
 */
 
 #[macro_export]
@@ -55,7 +52,7 @@ macro_rules! scad {
   Utility function for creating nalgebra vectors without having
   to write `na::Vector3::new(x,y,z)`
 */
-pub fn vec3(x: f32, y: f32, z: f32) -> na::Vector3<f32> {
+pub const fn vec3(x: f32, y: f32, z: f32) -> na::Vector3<f32> {
     na::Vector3::new(x, y, z)
 }
 
@@ -63,51 +60,47 @@ pub fn vec3(x: f32, y: f32, z: f32) -> na::Vector3<f32> {
   Utility function for creating nalgebra vectors without having
   to write `na::Vector2::new(x,y)`
 */
-pub fn vec2(x: f32, y: f32) -> na::Vector2<f32> {
+pub const fn vec2(x: f32, y: f32) -> na::Vector2<f32> {
     na::Vector2::new(x, y)
 }
 
 /**
-    Used to create structs with ::new functions that set default values
-    without having to write an impl for new.
+  Used to create structs with ::new functions that set default values
+  without having to write an impl for new.
 
-    This exists because a lot of times when making scad models, you want to
-    have a lot of parameters with fixed values. `qstruct!` also supports adding
-    parameters to the `new` function of the struct for the members that should
-    be changeable.
+  This exists because a lot of times when making scad models, you want to
+  have a lot of parameters with fixed values. `qstruct!` also supports adding
+  parameters to the `new` function of the struct for the members that should
+  be changeable.
 
-    #Usage
-    The qstruct starts with the name of the resulting struct, followed  by a
-    list of parameters to the `new()` function inside `()`. After that, the member
-    variables are listed inside `{}` and separated by `,`. Each member should
-    have a name, followed by the
-    type followed by the value. The value is any valid rust expression and can contain
-    any variables that are in the struct, or parameters to the new function.
+  ## Usage
+  The qstruct starts with the name of the resulting struct, followed  by a
+  list of parameters to the `new()` function inside `()`. After that, the member
+  variables are listed inside `{}` and separated by `,`. Each member should
+  have a name, followed by the
+  type followed by the value. The value is any valid rust expression and can contain
+  any variables that are in the struct, or parameters to the new function.
 
-    ```
-    #[macro_use]
-    use scad::*;
+  ```
+  # use scad::*;
+  qstruct!(Demo(inner_width: f32) {
+      //Constant value
+      shell_thickness: f32 = 1.,
 
-    qstruct!(Demo(inner_width: f32) {
-        //Constant value
-        shell_thickness: f32 = 1.,
+      //Value based on function parameter
+      outer_width: f32 = inner_width + shell_thickness,
 
-        //Value based on function parameter
-        outer_width: f32 = inner_width + shell_thickness,
+      //Value that depends on another member
+      outer_height: f32 = outer_width / 2.,
+  });
 
-        //Value that depends on another member
-        outer_height: f32 = outer_width / 2.,
-    });
-
-    //Add your own functions to the struct
-    impl Demo {
-        pub fn get_outer(&self) -> ScadObject {
-            scad!(Cube(vec3(self.outer_width, self.outer_width, self.outer_height)))
-        }
-    }
-
-    # fn main(){}
-    ```
+  //Add your own functions to the struct
+  impl Demo {
+      pub fn get_outer(&self) -> ScadObject {
+          scad!(Cube(vec3(self.outer_width, self.outer_width, self.outer_height)))
+      }
+  }
+  ```
 */
 #[macro_export]
 macro_rules! qstruct
