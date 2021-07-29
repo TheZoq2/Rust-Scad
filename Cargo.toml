@@ -8,6 +8,7 @@ repository = "https://github.com/thezoq2/Rust-Scad"
 documentation = "http://thezoq2.github.io/Rust-Scad/doc/scad_generator/index.html"
 license = "LGPL-2.0-or-later"
 readme = "Readme.md"
+edition = "2018"
 
 [dependencies]
-nalgebra= "0.16.8"
+nalgebra= "0.27.1"
