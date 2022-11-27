@@ -59,7 +59,7 @@ use scad::*;
 Then read the documentation for a quick introduction to the library
 
 ## Documentation
-The documentation  can be found at docs.rs/scad
+The documentation  can be found at [docs.rs/scad](https://docs.rs/scad)
 
 
 ## Utility repo
